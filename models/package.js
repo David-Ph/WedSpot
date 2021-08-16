@@ -34,9 +34,6 @@ const packageSchema = new mongoose.Schema(
         type: String,
       },
     ],
-    package_details: {
-      type: String,
-    },
   },
   {
     // Enables timestamps
