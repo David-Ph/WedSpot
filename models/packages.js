@@ -67,4 +67,4 @@ const packageSchema = new mongoose.Schema(
 // Enable soft delete, it will make delete column automaticly
 movieSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 
-module.exports = mongoose.model("Movie", movieSchema); // Export transaction models
+module.exports = mongoose.model("Package", packageSchema); // Export transaction models
