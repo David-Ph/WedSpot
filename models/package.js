@@ -21,6 +21,9 @@ const packageSchema = new mongoose.Schema(
     package_price: {
       type: String,
     },
+    package_capacity: {
+      type: String,
+    },
     package_details: {
       type: String,
     },
