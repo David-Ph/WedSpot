@@ -48,6 +48,7 @@ const packageSchema = new mongoose.Schema(
       transform: function (doc, ret) {
         ret.package_id = ret._id;
         delete ret.id;
+        delete ret._id;
         delete ret.deleted;
       },
     },
