@@ -22,12 +22,12 @@ class PackageController {
       const orderBy = req.query.order_by || "desc";
 
       const data = await Package.find()
-        .sort({ [sortField]: sortOrder })
+        .sort({ [sortField]: orderBy })
         .limit(limit)
         .skip(skipCount);
 
       if (data.length === 0) {
-        return next({ message: "Movie not found", statusCode: 404 });
+        return next({ message: "Packages not found", statusCode: 404 });
       }
 
       res.status(200).json({ data });
@@ -147,7 +147,7 @@ class PackageController {
       //   for soft delete
       const data = await Package.deleteById(req.params.id);
 
-      if (Package.nModified === 0) {
+      if (data.nModified === 0) {
         return next({ statusCode: 404, message: "Package not found" });
       }
 
