@@ -145,7 +145,7 @@ class PackageController {
   async deletePackage(req, res, next) {
     try {
       //   for soft delete
-      const data = await MoviPackagee.deleteById(req.params.id);
+      const data = await Package.deleteById(req.params.id);
 
       if (Package.nModified === 0) {
         return next({ statusCode: 404, message: "Package not found" });
@@ -158,4 +158,4 @@ class PackageController {
   }
 }
 
-module.exports = new MovieController();
+module.exports = new PackageController();

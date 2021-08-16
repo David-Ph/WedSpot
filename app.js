@@ -59,6 +59,7 @@ if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
 }
 // ? import routes
 // ////////////////
+const packageRouter = require("./routes/packages");
 
 // ? import error handler
 // //////////////////////
@@ -73,6 +74,7 @@ app.use(fileUpload());
 
 // ? set routes
 // /////////////
+app.use("/packages", packageRouter);
 
 app.all("*", async (req, res, next) => {
   try {
