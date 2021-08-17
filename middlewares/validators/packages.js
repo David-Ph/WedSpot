@@ -95,16 +95,16 @@ exports.packageValidator = async (req, res, next) => {
     }
 
     if (req.files) {
-      if (
-        !req.files.photo.mimetype.startsWith("image") ||
-        req.files.photo.size > 2000000
-      ) {
-        errorMessages.push("File must be an image and less than 2MB");
-      }
-      const move = promisify(req.files.photo.mv);
-      const newFileName = new Date().getTime() + "_" + req.files.photo.name;
-      await move(`./public/images/users/${newFileName}`);
-      req.body.photo = newFileName;
+      req.files.package_album?.forEach((photo) => {
+        if (photo.mimetype.startsWith("image") || photo.size > 2000000) {
+          errorMessages.push("File must be an image and less than 2MB");
+        }
+        const move = promisify(photo.mv);
+        const newFileName = new Date().getTime() + "_" + photo.name;
+        await move(`./public/images/packages/albums/${newFileName}`);
+
+        req.body.package_album.push(newFileName);
+      });
     }
 
     if (errorMessages.length > 0) {
