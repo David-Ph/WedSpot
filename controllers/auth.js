@@ -12,11 +12,11 @@ class Auth {
         expiresIn: "60d",
       });
 
-      const currentUser = await user
+      const current_user = await user
         .findOne({ _id: req.user._id })
         .select("-password");
 
-      res.status(200).json({ token, currentUser });
+      res.status(200).json({ token, current_user });
     } catch (error) {
       next(error);
     }
