@@ -2,22 +2,18 @@ const validator = require("validator");
 
 exports.register_validator = async (req, res, next) => {
   try {
-    const errorMessages = [];
-
-    if (validator.isEmpty(req.body.fullname)) {
-      errorMessages.push("Fullname can not be empty");
-    }
+    const error_messages = [];
 
     if (!validator.isEmail(req.body.email)) {
-      errorMessages.push("email is not valid");
+      error_messages.push("email is not valid");
     }
 
     if (!validator.isStrongPassword(req.body.password)) {
-      errorMessages.push("password is not strong enough");
+      error_messages.push("password is not strong enough");
     }
 
-    if (errorMessages.length > 0) {
-      return next({ messages: errorMessages, statusCode: 400 });
+    if (error_messages.length > 0) {
+      return next({ messages: error_messages, statusCode: 400 });
     }
 
     next();
@@ -28,14 +24,14 @@ exports.register_validator = async (req, res, next) => {
 
 exports.login_validator = async (req, res, next) => {
   try {
-    const errorMessages = [];
+    const error_messages = [];
 
     if (!validator.isEmail(req.body.email)) {
-      errorMessages.push("email is not valid");
+      error_messages.push("email is not valid");
     }
 
-    if (errorMessages.length > 0) {
-      return next({ messages: errorMessages, statusCode: 400 });
+    if (error_messages.length > 0) {
+      return next({ messages: error_messages, statusCode: 400 });
     }
 
     next();

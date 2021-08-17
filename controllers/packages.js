@@ -13,7 +13,7 @@ class PackageController {
 
   async getPackages(req, res, next) {
     try {
-      // get the page, limit, and movies to skip based on page
+      /// get the page, limit, and movies to skip based on page
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
       const skipCount = page > 0 ? (page - 1) * limit : 0;

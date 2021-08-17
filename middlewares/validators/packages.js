@@ -67,7 +67,7 @@ exports.packageValidator = async (req, res, next) => {
       }
     }
 
-    // check for package_services validity
+    /// check for package_services validity
     if (req.body.package_services.length > 0) {
       if (req.body.package_type.toLowerCase() == "venue") {
         venueServices.forEach((service) => {
