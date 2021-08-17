@@ -12,3 +12,9 @@ const locations = [
   "depok",
   "pyongyang",
 ];
+
+module.exports = {
+  venueServices,
+  organizerServices,
+  locations,
+};

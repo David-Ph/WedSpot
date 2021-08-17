@@ -1,5 +1,10 @@
 const { Package } = require("../../models");
 const validator = require("validator");
+const {
+  locations,
+  venueServices,
+  organizerServices,
+} = require("../../config/services");
 const { promisify } = require("util");
 
 function hasDuplicates(array) {
@@ -37,35 +42,69 @@ exports.packageValidator = async (req, res, next) => {
   try {
     const errorMessages = [];
 
-    if (req.body.releaseDate && !validator.isDate(req.body.releaseDate)) {
-      errorMessages.push(
-        "Release date not valid! Please enter a date in YYYY-MM-DD format"
-      );
-    }
-
-    if (req.body.budget && !validator.isInt(req.body.budget)) {
-      errorMessages.push("Budget not valid! Please enter a number");
-    }
-
-    if (req.body.trailer && !validator.isURL(req.body.trailer)) {
-      errorMessages.push("Please insert valid url!");
-    }
-    //  check for duplicates in req.body.categories
-    if (req.body.categories.length > 0 && hasDuplicates(req.body.categories)) {
-      errorMessages.push(
-        "Please do not insert a single category more than once!"
-      );
-    }
-    // check if req.body.categories has invalid category
     if (
-      req.body.categories.length > 0 ||
-      !validator.isEmpty(req.body.categories)
+      req.body.package_location &&
+      !locations.includes(req.body.package_location.toLowerCase())
     ) {
-      req.body.categories.forEach((tag) => {
-        if (!categories.includes(tag)) {
-          errorMessages.push(`${tag} is not a valid category!`);
-        }
-      });
+      errorMessages.push("Invalid location");
+    }
+
+    if (
+      req.body.package_price &&
+      !validator.isNumeric(req.body.package_price)
+    ) {
+      errorMessages.push("Invalid package_price format! Please insert numeric");
+    }
+
+    // check if package_capacity is valid format
+    if (req.body.package_capacity) {
+      const array = req.body.package_capacity.split("-");
+
+      if (array.length !== 2 || isNaN(array[0]) || isNaN(array[1])) {
+        errorMessages.push(
+          "Invalid package_capacity format. Example: '50-250'"
+        );
+      }
+    }
+
+    // check for package_services validity
+    if (req.body.package_services.length > 0) {
+      if (req.body.package_type.toLowerCase() == "venue") {
+        venueServices.forEach((service) => {
+          if (!req.body.package_services.includes(service)) {
+            errorMessages.push(`${service} is not a valid service!`);
+          }
+        });
+      } else {
+        organizerServices.forEach((service) => {
+          if (!req.body.package_services.includes(service)) {
+            errorMessages.push(`${service} is not a valid service!`);
+          }
+        });
+      }
+    }
+
+    //  check for duplicates in req.body.package_services
+    if (
+      req.body.package_services.length > 0 &&
+      hasDuplicates(req.body.package_services)
+    ) {
+      errorMessages.push(
+        "Please do not insert a single service more than once!"
+      );
+    }
+
+    if (req.files) {
+      if (
+        !req.files.photo.mimetype.startsWith("image") ||
+        req.files.photo.size > 2000000
+      ) {
+        errorMessages.push("File must be an image and less than 2MB");
+      }
+      const move = promisify(req.files.photo.mv);
+      const newFileName = new Date().getTime() + "_" + req.files.photo.name;
+      await move(`./public/images/users/${newFileName}`);
+      req.body.photo = newFileName;
     }
 
     if (errorMessages.length > 0) {
