@@ -3,25 +3,25 @@ const { promisify } = require("util");
 
 exports.user_validator = async (req, res, next) => {
   try {
-    const errorMessages = [];
+    const error_messages = [];
 
     if (req.body.fullname && validator.isInt(req.body.fullname)) {
-      errorMessages.push("Name has to be a string");
+      error_messages.push("Name has to be a string");
     }
 
     if (
       req.body.fullname &&
       !validator.isAlphanumeric(req.body.fullname, "en-US", { ignore: "._- " })
     ) {
-      errorMessages.push("Name can only contains letters and numbers");
+      error_messages.push("Name can only contains letters and numbers");
     }
 
     if (req.body.fullname && req.body.fullname.length < 3) {
-      errorMessages.push("Fullname characters minimal is 3");
+      error_messages.push("Fullname characters minimal is 3");
     }
 
     if (req.body.email && !validator.isEmail(req.body.email)) {
-      errorMessages.push("email is not valid");
+      error_messages.push("email is not valid");
     }
 
     // if (req.body.password && !validator.isStrongPassword(req.body.password)) {
@@ -33,15 +33,15 @@ exports.user_validator = async (req, res, next) => {
         !req.files.photo.mimetype.startsWith("image") ||
         req.files.photo.size > 2000000
       ) {
-        errorMessages.push("File must be an image and less than 2MB");
+        error_messages.push("File must be an image and less than 2MB");
       }
       const move = promisify(req.files.photo.mv);
-      const newFileName = new Date().getTime() + "_" + req.files.photo.name;
-      await move(`./public/images/users/${newFileName}`);
-      req.body.photo = newFileName;
+      const new_file_name = new Date().getTime() + "_" + req.files.photo.name;
+      await move(`./public/images/users/${new_file_name}`);
+      req.body.photo = new_file_name;
     }
-    if (errorMessages.length > 0) {
-      return next({ statusCode: 400, messages: errorMessages });
+    if (error_messages.length > 0) {
+      return next({ statusCode: 400, messages: error_messages });
     }
     next();
   } catch (error) {
