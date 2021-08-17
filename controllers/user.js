@@ -1,7 +1,7 @@
 const { user } = require("../models");
 
 class User {
-  async updateUser(req, res, next) {
+  async update_user(req, res, next) {
     try {
       const newData = await user
         .findOneAndUpdate({ _id: req.user.user }, req.body, { new: true })

@@ -13,7 +13,7 @@ const {
   login_validator,
 } = require("../middlewares/validators/auth");
 
-const { updateUser } = require("../controllers/user");
+const { update_user } = require("../controllers/user");
 
 const { get_token, get_me } = require("../controllers/auth");
 
@@ -24,7 +24,7 @@ const router = express.Router();
 router.post("/register", register_validator, register, get_token);
 router.post("/login", login_validator, login, get_token);
 router.get("/getMe", user, get_me);
-router.put("/edit", user_validator, updateUser);
+router.put("/edit", user_validator, update_user);
 
 // exports
 module.exports = router;
