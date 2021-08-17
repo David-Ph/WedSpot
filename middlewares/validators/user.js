@@ -1,7 +1,7 @@
 const validator = require("validator");
 const { promisify } = require("util");
 
-exports.userValidator = async (req, res, next) => {
+exports.user_validator = async (req, res, next) => {
   try {
     const errorMessages = [];
 

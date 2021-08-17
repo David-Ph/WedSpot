@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken"); // import jwt
 const { user } = require("../models");
 
 class Auth {
-  async getToken(req, res, next) {
+  async get_token(req, res, next) {
     try {
       const data = {
         user: req.user._id,
@@ -22,7 +22,7 @@ class Auth {
     }
   }
 
-  async getMe(req, res, next) {
+  async get_me(req, res, next) {
     try {
       const data = await user
         .findOne({ _id: req.user.user })

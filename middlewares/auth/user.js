@@ -6,7 +6,7 @@ const ExtractJWT = require("passport-jwt").ExtractJwt; // to extract or read jwt
 const { user } = require("../../models"); // Import user
 
 // Logic to signup
-exports.signup = (req, res, next) => {
+exports.register = (req, res, next) => {
   passport.authenticate("signup", { session: false }, (err, user, info) => {
     if (err) {
       return next({ message: err.message, statusCode: 401 });
@@ -43,7 +43,7 @@ passport.use(
 );
 
 // Logic to signin
-exports.signin = (req, res, next) => {
+exports.login = (req, res, next) => {
   passport.authenticate("signin", { session: false }, (err, user, info) => {
     if (err) {
       return next({ message: err.message, statusCode: 401 });
