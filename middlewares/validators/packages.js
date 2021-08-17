@@ -69,19 +69,22 @@ exports.packageValidator = async (req, res, next) => {
 
     // check for package_services validity
     if (req.body.package_services.length > 0) {
-      if (req.body.package_type.toLowerCase() == "venue") {
-        venueServices.forEach((service) => {
-          if (!req.body.package_services.includes(service)) {
-            errorMessages.push(`${service} is not a valid service!`);
-          }
-        });
-      } else {
-        organizerServices.forEach((service) => {
-          if (!req.body.package_services.includes(service)) {
-            errorMessages.push(`${service} is not a valid service!`);
-          }
-        });
+      // if package_services is not an array, make it an array
+      if (typeof req.body.package_services === "string") {
+        req.body.package_services = [req.body.package_services];
       }
+
+      req.body.package_services.forEach((service) => {
+        if (req.body.package_type?.toLowerCase() == "venue") {
+          if (!venueServices.includes(service)) {
+            errorMessages.push(`${service} is invalid venue service!`);
+          }
+        } else {
+          if (!organizerServices.includes(service)) {
+            errorMessages.push(`${service} is invalid organizer service!`);
+          }
+        }
+      });
     }
 
     //  check for duplicates in req.body.package_services
@@ -95,15 +98,25 @@ exports.packageValidator = async (req, res, next) => {
     }
 
     if (req.files) {
-      req.files.package_album?.forEach((photo) => {
-        if (photo.mimetype.startsWith("image") || photo.size > 2000000) {
-          errorMessages.push("File must be an image and less than 2MB");
-        }
-        const move = promisify(photo.mv);
-        const newFileName = new Date().getTime() + "_" + photo.name;
-        await move(`./public/images/packages/albums/${newFileName}`);
+      // if package_album is not an array, make it an array
+      if (
+        typeof req.files.package_album === "object" &&
+        !Array.isArray(req.files.package_album)
+      ) {
+        req.files.package_album = [req.files.package_album];
+      }
 
-        req.body.package_album.push(newFileName);
+      req.body.package_album = [];
+      req.files.package_album?.forEach(async (photo) => {
+        if (!photo.mimetype.startsWith("image") || photo.size > 2000000) {
+          errorMessages.push("File must be an image and less than 2MB");
+        } else {
+          const move = promisify(photo.mv);
+          const newFileName = new Date().getTime() + "_" + photo.name;
+          req.body.package_album.push(newFileName);
+
+          await move(`./public/images/packages/album/${newFileName}`);
+        }
       });
     }
 
