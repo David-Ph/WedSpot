@@ -6,14 +6,15 @@ const packageSchema = new mongoose.Schema(
     package_vendor_id: {
       type: mongoose.Types.ObjectId,
       ref: "Vendor",
-      required: true,
+      required: [true, "package_vendor_id can't be empty"],
     },
     package_type: {
       type: String,
-      required: true,
+      required: [true, "package_type can't be empty"],
     },
     package_name: {
       type: String,
+      required: [true, "package_name can't be empty"],
     },
     package_location: {
       type: String,
