@@ -68,7 +68,7 @@ exports.packageValidator = async (req, res, next) => {
     }
 
     // check for package_services validity
-    if (req.body.package_services.length > 0) {
+    if (req.body.packages_services && req.body.package_services.length > 0) {
       // if package_services is not an array, make it an array
       if (typeof req.body.package_services === "string") {
         req.body.package_services = [req.body.package_services];
@@ -89,6 +89,7 @@ exports.packageValidator = async (req, res, next) => {
 
     //  check for duplicates in req.body.package_services
     if (
+      req.body.packages_services &&
       req.body.package_services.length > 0 &&
       hasDuplicates(req.body.package_services)
     ) {
