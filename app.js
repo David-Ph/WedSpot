@@ -60,6 +60,8 @@ if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
 // ? import routes
 // ////////////////
 
+const userRouter = require("./routes/user");
+
 // ? import error handler
 // //////////////////////
 const errorHandler = require("./middlewares/errorHandler/errorHandler");
@@ -73,6 +75,8 @@ app.use(fileUpload());
 
 // ? set routes
 // /////////////
+
+app.use("/user", userRouter);
 
 app.all("*", async (req, res, next) => {
   try {
