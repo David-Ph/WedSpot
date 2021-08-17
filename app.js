@@ -59,6 +59,7 @@ if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
 }
 // ? import routes
 // ////////////////
+const packageRouter = require("./routes/packages");
 
 const user_router = require("./routes/user");
 
@@ -75,6 +76,7 @@ app.use(fileUpload());
 
 // ? set routes
 // /////////////
+app.use("/packages", packageRouter);
 
 app.use("/user", user_router);
 
