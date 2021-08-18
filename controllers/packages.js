@@ -19,7 +19,9 @@ class PackageController {
       const minPrice = parseInt(req.query.min_price) || 0;
       const maxPrice = parseInt(req.query.max_price) || 3000000000;
 
-      const subQuery = {};
+      const subQuery = {
+        package_price: { $gte: minPrice, $lte: maxPrice },
+      };
       if (req.query.type) subQuery.package_type = req.query.type;
       if (req.query.location) subQuery.package_location = req.query.location;
 
@@ -39,13 +41,7 @@ class PackageController {
 
       // filter based on capacity
       data = data.filter((pack) => {
-        return filterPackageCapacity(
-          pack,
-          minCapacity,
-          maxCapacity,
-          minPrice,
-          maxPrice
-        );
+        return filterPackageCapacity(pack, minCapacity, maxCapacity);
       });
 
       if (data.length === 0) {
@@ -180,23 +176,11 @@ class PackageController {
   }
 }
 
-function filterPackageCapacity(
-  package,
-  minCapacity,
-  maxCapacity,
-  minPrice,
-  maxPrice
-) {
-  const packagePrice = parseInt(package.package_price);
+function filterPackageCapacity(package, minCapacity, maxCapacity) {
   const packageMinCapacity = parseInt(package.package_capacity.split("-")[0]);
   const packageMaxCapacity = parseInt(package.package_capacity.split("-")[1]);
   // (s1 <= e2) && (s2 <= e1)
-  return (
-    minCapacity <= packageMaxCapacity &&
-    packageMinCapacity <= maxCapacity &&
-    minPrice <= packagePrice &&
-    packagePrice <= maxPrice
-  );
+  return minCapacity <= packageMaxCapacity && packageMinCapacity <= maxCapacity;
 }
 
 module.exports = new PackageController();
