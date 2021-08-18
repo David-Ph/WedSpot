@@ -96,7 +96,7 @@ exports.packageValidator = async (req, res, next) => {
       );
     }
 
-    if (req.files) {
+    if (req.files.length > 0) {
       req.body.package_album = [];
       req.files.forEach((photo) => {
         if (!photo.mimetype.startsWith("image") || photo.size > 2000000) {
