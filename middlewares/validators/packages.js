@@ -41,6 +41,7 @@ exports.queryPackageValidator = async (req, res, next) => {
 exports.packageValidator = async (req, res, next) => {
   try {
     const errorMessages = [];
+
     if (
       req.body.package_location &&
       !locations.includes(req.body.package_location.toLowerCase())
@@ -48,10 +49,7 @@ exports.packageValidator = async (req, res, next) => {
       errorMessages.push("Invalid location");
     }
 
-    if (
-      req.body.package_price &&
-      !validator.isNumeric(req.body.package_price)
-    ) {
+    if (req.body.package_price && !validator.isInt(req.body.package_price)) {
       errorMessages.push("Invalid package_price format! Please insert numeric");
     }
 
