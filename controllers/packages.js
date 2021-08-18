@@ -13,7 +13,17 @@ class PackageController {
 
   async getPackages(req, res, next) {
     try {
-      /// get the page, limit, and movies to skip based on page
+      // get the page, limit, and movies to skip based on page
+      // TODO filter capacity, price, type, location
+      const minCapacity = req.query.min_capacity || 0;
+      const maxCapacity = req.query.max_capacity || 10000;
+
+      const minPrice = req.query.min_price || 0;
+      const max_price = req.query.max_price || 1000000000;
+
+      const type = req.query.type;
+      const location = req.query.location;
+
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
       const skipCount = page > 0 ? (page - 1) * limit : 0;

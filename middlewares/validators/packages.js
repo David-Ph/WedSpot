@@ -41,7 +41,6 @@ exports.queryPackageValidator = async (req, res, next) => {
 exports.packageValidator = async (req, res, next) => {
   try {
     const errorMessages = [];
-
     if (
       req.body.package_location &&
       !locations.includes(req.body.package_location.toLowerCase())
@@ -67,25 +66,29 @@ exports.packageValidator = async (req, res, next) => {
       }
     }
 
-    /// check for package_services validity
-    if (req.body.package_services.length > 0) {
-      if (req.body.package_type.toLowerCase() == "venue") {
-        venueServices.forEach((service) => {
-          if (!req.body.package_services.includes(service)) {
-            errorMessages.push(`${service} is not a valid service!`);
-          }
-        });
-      } else {
-        organizerServices.forEach((service) => {
-          if (!req.body.package_services.includes(service)) {
-            errorMessages.push(`${service} is not a valid service!`);
-          }
-        });
+    // check for package_services validity
+    if (req.body.packages_services && req.body.package_services.length > 0) {
+      // if package_services is not an array, make it an array
+      if (typeof req.body.package_services === "string") {
+        req.body.package_services = [req.body.package_services];
       }
+
+      req.body.package_services.forEach((service) => {
+        if (req.body.package_type?.toLowerCase() == "venue") {
+          if (!venueServices.includes(service)) {
+            errorMessages.push(`${service} is invalid venue service!`);
+          }
+        } else {
+          if (!organizerServices.includes(service)) {
+            errorMessages.push(`${service} is invalid organizer service!`);
+          }
+        }
+      });
     }
 
     //  check for duplicates in req.body.package_services
     if (
+      req.body.packages_services &&
       req.body.package_services.length > 0 &&
       hasDuplicates(req.body.package_services)
     ) {
@@ -94,17 +97,15 @@ exports.packageValidator = async (req, res, next) => {
       );
     }
 
-    if (req.files) {
-      if (
-        !req.files.photo.mimetype.startsWith("image") ||
-        req.files.photo.size > 2000000
-      ) {
-        errorMessages.push("File must be an image and less than 2MB");
-      }
-      const move = promisify(req.files.photo.mv);
-      const newFileName = new Date().getTime() + "_" + req.files.photo.name;
-      await move(`./public/images/users/${newFileName}`);
-      req.body.photo = newFileName;
+    if (req.files.length > 0) {
+      req.body.package_album = [];
+      req.files.forEach((photo) => {
+        if (!photo.mimetype.startsWith("image") || photo.size > 2000000) {
+          errorMessages.push("File must be an image and less than 2MB");
+        } else {
+          req.body.package_album.push(photo.path);
+        }
+      });
     }
 
     if (errorMessages.length > 0) {

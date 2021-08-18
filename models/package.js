@@ -36,6 +36,7 @@ const packageSchema = new mongoose.Schema(
     package_album: [
       {
         type: String,
+        get: getPhoto,
       },
     ],
   },
@@ -65,6 +66,14 @@ const packageSchema = new mongoose.Schema(
 //   foreignField: "movie_id",
 //   justOne: false,
 // });
+
+function getPhoto(photo) {
+  if (!photo || photo.includes("https") || photo.includes("http")) {
+    return photo;
+  }
+
+  return `${process.env.HOST}/images/packages/album/${photo}`;
+}
 
 // Enable soft delete, it will make delete column automaticly
 packageSchema.plugin(mongooseDelete, { overrideMethods: "all" });
