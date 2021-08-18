@@ -13,11 +13,15 @@ const PackageController = require("../controllers/packages");
 
 // ? import validators
 // ////////////////////
-const { packageValidator } = require("../middlewares/validators/packages");
+const {
+  packageValidator,
+  queryPackageValidator,
+} = require("../middlewares/validators/packages");
 
 // ? set routers
 // //////////////
-router.get("/", PackageController.getPackages);
+router.get("/", queryPackageValidator, PackageController.getPackages);
+router.get("/count", PackageController.getPackagesCount);
 router.get("/:id", PackageController.getPackageById);
 router.put(
   "/:id",
