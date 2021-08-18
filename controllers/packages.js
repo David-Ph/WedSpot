@@ -13,28 +13,40 @@ class PackageController {
 
   async getPackages(req, res, next) {
     try {
-      // get the page, limit, and movies to skip based on page
-      // TODO filter capacity, price, type, location
-      const minCapacity = req.query.min_capacity || 0;
-      const maxCapacity = req.query.max_capacity || 10000;
+      // ? filtering
+      const minCapacity = parseInt(req.query.min_capacity) || 0;
+      const maxCapacity = parseInt(req.query.max_capacity) || 10000;
+      const minPrice = parseInt(req.query.min_price) || 0;
+      const maxPrice = parseInt(req.query.max_price) || 3000000000;
 
-      const minPrice = req.query.min_price || 0;
-      const max_price = req.query.max_price || 1000000000;
+      const subQuery = {};
+      if (req.query.type) subQuery.package_type = req.query.type;
+      if (req.query.location) subQuery.package_location = req.query.location;
 
-      const type = req.query.type;
-      const location = req.query.location;
-
+      // ? pagination
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
       const skipCount = page > 0 ? (page - 1) * limit : 0;
 
+      // ? sorting
       const sortField = req.query.sort_by || "created_at";
       const orderBy = req.query.order_by || "desc";
 
-      const data = await Package.find()
+      let data = await Package.find(subQuery)
         .sort({ [sortField]: orderBy })
         .limit(limit)
         .skip(skipCount);
+
+      // filter based on capacity
+      data = data.filter((pack) => {
+        return filterPackageCapacity(
+          pack,
+          minCapacity,
+          maxCapacity,
+          minPrice,
+          maxPrice
+        );
+      });
 
       if (data.length === 0) {
         return next({ message: "Packages not found", statusCode: 404 });
@@ -166,6 +178,25 @@ class PackageController {
       next(error);
     }
   }
+}
+
+function filterPackageCapacity(
+  package,
+  minCapacity,
+  maxCapacity,
+  minPrice,
+  maxPrice
+) {
+  const packagePrice = parseInt(package.package_price);
+  const packageMinCapacity = parseInt(package.package_capacity.split("-")[0]);
+  const packageMaxCapacity = parseInt(package.package_capacity.split("-")[1]);
+  // (s1 <= e2) && (s2 <= e1)
+  return (
+    minCapacity <= packageMaxCapacity &&
+    packageMinCapacity <= maxCapacity &&
+    minPrice <= packagePrice &&
+    packagePrice <= maxPrice
+  );
 }
 
 module.exports = new PackageController();
