@@ -4,7 +4,6 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });
 const express = require("express");
-const fileUpload = require("express-fileupload");
 const app = express();
 const fs = require("fs");
 const path = require("path");
@@ -70,7 +69,6 @@ const errorHandler = require("./middlewares/errorHandler/errorHandler");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(fileUpload());
 
 // ? set routes
 // /////////////

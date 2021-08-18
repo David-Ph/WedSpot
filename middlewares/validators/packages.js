@@ -41,7 +41,6 @@ exports.queryPackageValidator = async (req, res, next) => {
 exports.packageValidator = async (req, res, next) => {
   try {
     const errorMessages = [];
-
     if (
       req.body.package_location &&
       !locations.includes(req.body.package_location.toLowerCase())
@@ -98,25 +97,13 @@ exports.packageValidator = async (req, res, next) => {
       );
     }
 
-    if (req.files) {
-      // if package_album is not an array, make it an array
-      if (
-        typeof req.files.package_album === "object" &&
-        !Array.isArray(req.files.package_album)
-      ) {
-        req.files.package_album = [req.files.package_album];
-      }
-
+    if (req.files.length > 0) {
       req.body.package_album = [];
-      req.files.package_album?.forEach(async (photo) => {
+      req.files.forEach((photo) => {
         if (!photo.mimetype.startsWith("image") || photo.size > 2000000) {
           errorMessages.push("File must be an image and less than 2MB");
         } else {
-          const move = promisify(photo.mv);
-          const newFileName = new Date().getTime() + "_" + photo.name;
-          req.body.package_album.push(newFileName);
-
-          await move(`./public/images/packages/album/${newFileName}`);
+          req.body.package_album.push(photo.path);
         }
       });
     }
