@@ -20,7 +20,7 @@ const packageSchema = new mongoose.Schema(
       type: String,
     },
     package_price: {
-      type: String,
+      type: Number,
     },
     package_capacity: {
       type: String,
