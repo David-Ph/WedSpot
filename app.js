@@ -59,6 +59,8 @@ if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
 }
 // ? import routes
 // ////////////////
+const auth = require("./routes/auth");
+const vendors = require("./routes/vendors");
 
 // ? import error handler
 // //////////////////////
@@ -73,6 +75,8 @@ app.use(fileUpload());
 
 // ? set routes
 // /////////////
+app.use("/auth", auth);
+app.use("/vendors", vendors);
 
 app.all("*", async (req, res, next) => {
   try {
