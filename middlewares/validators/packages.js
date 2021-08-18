@@ -97,9 +97,6 @@ exports.packageValidator = async (req, res, next) => {
     }
 
     if (req.files) {
-      console.log(req.files);
-
-      // if package_album is not an array, make it an array
       req.body.package_album = [];
       req.files.forEach((photo) => {
         if (!photo.mimetype.startsWith("image") || photo.size > 2000000) {
