@@ -70,7 +70,7 @@ const errorHandler = require("./middlewares/errorHandler/errorHandler");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(fileUpload());
+// app.use(fileUpload());
 
 // ? set routes
 // /////////////
