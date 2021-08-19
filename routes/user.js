@@ -11,11 +11,11 @@ const { user_validator } = require("../middlewares/validators/user");
 const {
   register_validator,
   login_validator,
-} = require("../middlewares/validators/auth");
+} = require("../middlewares/validators/user_auth.js");
 
 const { update_user } = require("../controllers/user");
 
-const { get_token, get_me } = require("../controllers/auth");
+const { get_token, get_me } = require("../controllers/user_auth.js");
 
 // make router
 const router = express.Router();
