@@ -3,11 +3,11 @@ const LocalStrategy = require("passport-local").Strategy; // Login but not using
 const bcrypt = require("bcrypt"); // to compare the password
 const JWTstrategy = require("passport-jwt").Strategy; // to enable jwt in passport
 const ExtractJWT = require("passport-jwt").ExtractJwt; // to extract or read jwt
-const { vendor } = require("../../models"); // Import user
+const { vendor } = require("../../models"); // Import vendor
 
 // Logic to register
 exports.register = (req, res, next) => {
-  passport.authenticate("register", { session: false }, (err, user, info) => {
+  passport.authenticate("register", { session: false }, (err, vendor, info) => {
     if (err) {
       return next({ message: err.message, statusCode: 401 });
     }
@@ -17,6 +17,7 @@ exports.register = (req, res, next) => {
     }
 
     req.vendor = vendor;
+    console.log(req.vendor);
 
     next();
   })(req, res, next);
@@ -26,7 +27,7 @@ passport.use(
   "register",
   new LocalStrategy(
     {
-      usernameField: "vendor_email",
+      vendornameField: "vendor_email",
       passwordField: "vendor_password",
       passReqToCallback: true,
     },
@@ -241,7 +242,7 @@ passport.use(
     },
     async (token, done) => {
       try {
-        const data = await user.findOne({ _id: token.vendor });
+        const data = await vendor.findOne({ _id: token.vendor });
 
         if (data.role === "vendor") {
           return done(null, token, { message: "vendor" });

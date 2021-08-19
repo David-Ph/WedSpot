@@ -75,7 +75,7 @@ app.use(fileUpload());
 
 // ? set routes
 // /////////////
-app.use("/auth", auth);
+app.use("/vendors", auth);
 app.use("/vendors", vendors);
 
 app.all("*", async (req, res, next) => {

@@ -4,13 +4,32 @@ class Vendor {
   async getToken(req, res, next) {
     try {
       const data = {
-        vendor: req.vendor._id,
+        user: req.vendor._id,
       };
-      const token = jwt.sign(data, process.env.JWT_SECRET);
 
-      res.status(200).json({ _id: req.vendor._id, token });
+      const token = jwt.sign(data, process.env.JWT_SECRET, {
+        expiresIn: "60d",
+      });
+
+      const currentUser = await vendor
+        .findOne({ _id: req.vendor._id })
+        .select("-password");
+
+      res.status(200).json({ token, currentVendor });
     } catch (error) {
-      /* istanbul ignore next */
+      next(error);
+    }
+  }
+
+  async getMe(req, res, next) {
+    try {
+      const data = await vendor
+        .findOne({ _id: req.vendor.vendor })
+        // .populate("reviews")
+        .select("-password");
+
+      res.status(200).json({ data });
+    } catch (error) {
       next(error);
     }
   }

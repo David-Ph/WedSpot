@@ -17,20 +17,20 @@ exports.getDetailValidator = async (req, res, next) => {
   }
 };
 
-exports.createOrUpdateVendorValidator = async (req, res, next) => {
+exports.vendorValidator = async (req, res, next) => {
   try {
     /* Validate the user input */
     const errorMessages = [];
 
-    if (req.body.vendor_name && !validator.isValid(req.body.vendor_name)) {
-      errorMessages.push("Vendor's name is not valid");
+    if (req.body.vendor_name && !validator.isEmpty(req.body.vendor_name)) {
+      errorMessages.push("Vendor's name should not be empty");
     }
 
     if (
       req.body.vendor_email_info &&
       !validator.isEmail(req.body.vendor_email)
     ) {
-      errorMessages.push("Email account is not valid");
+      errorMessages.push("Email account should not be empty");
     }
 
     if (req.body.vendor_phone && !validator.isPhone(req.body.vendor_phone)) {
@@ -39,7 +39,7 @@ exports.createOrUpdateVendorValidator = async (req, res, next) => {
       }
     }
 
-    if (req.body.vendor_website && !validator.isUrl(req.body.vendor_website)) {
+    if (req.body.vendor_website && !validator.isURL(req.body.vendor_website)) {
       {
         errorMessages.push("Website address is not valid");
       }
@@ -47,21 +47,21 @@ exports.createOrUpdateVendorValidator = async (req, res, next) => {
 
     if (
       req.body.vendor_facebook &&
-      !validator.isValid(req.body.vendor_facebook)
+      !validator.isEmpty(req.body.vendor_facebook)
     ) {
       errorMessages.push("Facebook account is not valid");
     }
 
     if (
       req.body.vendor_twitter &&
-      !validator.isValid(req.body.vendor_twitter)
+      !validator.isEmpty(req.body.vendor_twitter)
     ) {
       errorMessages.push("Twitter account is not valid");
     }
 
     if (
       req.body.vendor_instagram &&
-      !validator.isValid(req.body.vendor_instagram)
+      !validator.isEmpty(req.body.vendor_instagram)
     ) {
       errorMessages.push("Instagram account is not valid");
     }
@@ -84,21 +84,19 @@ exports.createOrUpdateVendorValidator = async (req, res, next) => {
     }
 
     // check if package_capacity is valid format
-    if (req.body.package_capacity) {
-      const array = req.body.package_capacity.split("-");
+    if (req.body.vendor_capacity) {
+      const array = req.body.vendor_capacity.split("-");
 
       if (array.length !== 2 || isNaN(array[0]) || isNaN(array[1])) {
-        errorMessages.push(
-          "Invalid package_capacity format. Example: '50-250'"
-        );
+        errorMessages.push("Invalid vendor_capacity format. Example: '50-250'");
       }
     }
 
-    if (req.body.vendor_types) {
-      if (!validator.isValid(req.body.vendor_types)) {
-        errorMessages.push("Vendor type is not valid");
-      }
-    }
+    // if (req.body.vendor_types) {
+    //   if (!validator.isValid(req.body.vendor_types)) {
+    //     errorMessages.push("Vendor type is not valid");
+    //   }
+    // }
     //checking limited photo size
     if (req.files) {
       if (

@@ -52,22 +52,6 @@ class Vendors {
     }
   }
 
-  async createVendor(req, res, next) {
-    try {
-      const newData = await Vendor.create(req.body);
-
-      const data = await Vendor.findOne({
-        _id: newData._id,
-      });
-
-      res
-        .status(201)
-        .json({ data, message: "New Vendor Successfully Created!" });
-    } catch (error) {
-      next(error);
-    }
-  }
-
   async updateVendor(req, res, next) {
     try {
       const newData = await Vendor.findOneAndUpdate(
