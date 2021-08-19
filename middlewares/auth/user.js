@@ -117,7 +117,7 @@ passport.use(
       try {
         const data = await User.findOne({ _id: token.user });
 
-        if (data.role === "user") {
+        if (data) {
           return done(null, token);
         }
 

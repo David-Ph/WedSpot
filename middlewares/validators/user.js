@@ -5,12 +5,12 @@ exports.user_validator = async (req, res, next) => {
   try {
     const error_messages = [];
 
-    if (req.body.email && !validator.isEmail(req.body.user_email)) {
+    if (req.body.user_email && !validator.isEmail(req.body.user_email)) {
       error_messages.push("email is not valid");
     }
 
     if (
-      req.body.password &&
+      req.body.user_password &&
       !validator.isStrongPassword(req.body.user_password)
     ) {
       error_messages.push("password is not strong enough");
