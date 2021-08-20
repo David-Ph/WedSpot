@@ -1,11 +1,14 @@
 const { add_users, delete_users } = require("./user");
+const { addPackages, deletePackages } = require("./packages");
 
 async function add() {
   await add_users();
+  await addPackages();
 }
 
 async function remove() {
   await delete_users();
+  await deletePackages();
 }
 
 if (process.argv[2] === "add") {
