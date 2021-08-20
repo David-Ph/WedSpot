@@ -22,18 +22,21 @@ exports.vendorValidator = async (req, res, next) => {
     /* Validate the user input */
     const errorMessages = [];
 
-    if (req.body.vendor_name && !validator.isEmpty(req.body.vendor_name)) {
-      errorMessages.push("Vendor's name should not be empty");
-    }
+    // if (req.body.vendor_name && !validator.isEmpty(req.body.vendor_name)) {
+    //   errorMessages.push("Vendor's name should not be empty");
+    // }
 
     if (
       req.body.vendor_email_info &&
-      !validator.isEmail(req.body.vendor_email)
+      !validator.isEmail(req.body.vendor_email_info)
     ) {
       errorMessages.push("Email account should not be empty");
     }
 
-    if (req.body.vendor_phone && !validator.isPhone(req.body.vendor_phone)) {
+    if (
+      req.body.vendor_phone &&
+      !validator.isMobilePhone(req.body.vendor_phone)
+    ) {
       {
         errorMessages.push("Phone number is not valid");
       }
@@ -47,23 +50,26 @@ exports.vendorValidator = async (req, res, next) => {
 
     if (
       req.body.vendor_facebook &&
-      !validator.isEmpty(req.body.vendor_facebook)
+      !validator.isURL(req.body.vendor_facebook)
     ) {
-      errorMessages.push("Facebook account is not valid");
+      errorMessages.push(
+        "Facebook account is not valid, Example: 'www.facebook.com/vendorAccount'"
+      );
     }
 
-    if (
-      req.body.vendor_twitter &&
-      !validator.isEmpty(req.body.vendor_twitter)
-    ) {
-      errorMessages.push("Twitter account is not valid");
+    if (req.body.vendor_twitter && !validator.isURL(req.body.vendor_twitter)) {
+      errorMessages.push(
+        "Twitter account is not valid, Example: 'www.twitter.com/vendorAccount'"
+      );
     }
 
     if (
       req.body.vendor_instagram &&
-      !validator.isEmpty(req.body.vendor_instagram)
+      !validator.isURL(req.body.vendor_instagram)
     ) {
-      errorMessages.push("Instagram account is not valid");
+      errorMessages.push(
+        "Instagram account is not valid, Example: 'www.instagram.com/vendorAccount'"
+      );
     }
 
     if (

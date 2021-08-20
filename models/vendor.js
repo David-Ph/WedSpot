@@ -19,7 +19,6 @@ const vendorSchema = new mongoose.Schema(
     },
     vendor_email_info: {
       type: String,
-      unique: true,
     },
     vendor_header: {
       type: String,
@@ -86,9 +85,13 @@ function setPassword(password) {
   return bcrypt.hashSync(password, 10);
 }
 
-vendorSchema.post("findOneAndUpdate", function (doc) {
+vendorSchema.post("findOneAndUpdate", async function (doc) {
   if (!doc.vendor_has_filled_info) {
+    console.log("hello");
     doc.vendor_has_filled_info = true;
+    await doc.save();
   }
-}),
-  (module.exports = mongoose.model("Vendor", vendorSchema));
+  console.log(doc);
+});
+
+module.exports = mongoose.model("Vendor", vendorSchema);

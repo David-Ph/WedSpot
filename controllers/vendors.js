@@ -3,7 +3,7 @@ const { vendor } = require("../models");
 class Vendors {
   async getVedorsCount(req, res, next) {
     try {
-      const vendorsCount = await Vendor.count();
+      const vendorsCount = await vendor.count();
 
       res.status(200).json({ data: vendorsCount });
     } catch (error) {
@@ -21,7 +21,8 @@ class Vendors {
       const sortField = req.query.sort_by || "created_at";
       const orderBy = req.query.order_by || "desc";
 
-      const data = await Vendor.find()
+      const data = await vendor
+        .find()
         .sort({ [sortField]: orderBy })
         .limit(limit)
         .skip(skipCount);
@@ -38,7 +39,7 @@ class Vendors {
 
   async getVendorById(req, res, next) {
     try {
-      let data = await Vendor.findOne({
+      let data = await vendor.findOne({
         _id: req.params.id,
       });
 
@@ -54,8 +55,8 @@ class Vendors {
 
   async updateVendor(req, res, next) {
     try {
-      const newData = await Vendor.findOneAndUpdate(
-        { _id: req.params.id },
+      const newData = await vendor.findOneAndUpdate(
+        { _id: req.vendor.user },
         req.body,
         { new: true }
       );
@@ -75,7 +76,7 @@ class Vendors {
   async deleteVendor(req, res, next) {
     try {
       //   for soft delete
-      const data = await Vendor.deleteById(req.params.id);
+      const data = await vendor.deleteById(req.params.id);
 
       if (data.nModified === 0) {
         return next({ statusCode: 404, message: "Vendor not found" });

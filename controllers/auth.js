@@ -1,3 +1,5 @@
+const { vendor } = require("../models");
+
 const jwt = require("jsonwebtoken");
 
 class Vendor {
@@ -11,7 +13,7 @@ class Vendor {
         expiresIn: "60d",
       });
 
-      const currentUser = await vendor
+      const currentVendor = await vendor
         .findOne({ _id: req.vendor._id })
         .select("-password");
 
@@ -24,7 +26,7 @@ class Vendor {
   async getMe(req, res, next) {
     try {
       const data = await vendor
-        .findOne({ _id: req.vendor.vendor })
+        .findOne({ _id: req.vendor.user })
         // .populate("reviews")
         .select("-password");
 

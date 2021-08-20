@@ -17,7 +17,6 @@ exports.register = (req, res, next) => {
     }
 
     req.vendor = vendor;
-    console.log(req.vendor);
 
     next();
   })(req, res, next);
@@ -27,7 +26,7 @@ passport.use(
   "register",
   new LocalStrategy(
     {
-      vendornameField: "vendor_email",
+      usernameField: "vendor_email",
       passwordField: "vendor_password",
       passReqToCallback: true,
     },
@@ -159,9 +158,9 @@ passport.use(
     },
     async (token, done) => {
       try {
-        const data = await vendor.findOne({ _id: token.vendor });
+        const data = await vendor.findOne({ _id: token.user });
 
-        if (data.role === "vendor") {
+        if (data) {
           return done(null, token);
         }
 
@@ -242,7 +241,7 @@ passport.use(
     },
     async (token, done) => {
       try {
-        const data = await vendor.findOne({ _id: token.vendor });
+        const data = await vendor.findOne({ _id: token.user });
 
         if (data.role === "vendor") {
           return done(null, token, { message: "vendor" });

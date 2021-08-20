@@ -34,8 +34,8 @@ router.post("/register", registerValidator, register, getToken);
 router.post("/login", logInValidator, login, getToken);
 router.get("/", getVendors);
 router.get("/getMe", vendor, getMe);
-router.put("/edit", vendor, updateVendor);
-router.delete("/getMe", vendorValidator, deleteVendor, getMe);
+router.put("/edit", vendorValidator, vendor, updateVendor);
+// router.delete("/getMe", vendorValidator, deleteVendor, getMe);
 
 // Exports
 module.exports = router;
