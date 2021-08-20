@@ -7,10 +7,13 @@ exports.user_validator = async (req, res, next) => {
 
     if (
       req.body.user_fullname &&
-      validator.isAlphanumeric(req.body.user_fullname)
+      !validator.isAlphanumeric(req.body.user_fullname, "en-US", {
+        ignore: "._- ",
+      })
     ) {
-      error_messages.push("Fullname can only include ");
+      errorMessages.push("Name can only contains letters and numbers");
     }
+
     if (req.body.user_email && !validator.isEmail(req.body.user_email)) {
       error_messages.push("email is not valid");
     }

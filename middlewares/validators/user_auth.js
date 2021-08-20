@@ -3,7 +3,15 @@ const validator = require("validator");
 exports.register_validator = async (req, res, next) => {
   try {
     const error_messages = [];
-    console.log(req.body);
+
+    if (
+      req.body.user_fullname &&
+      !validator.isAlphanumeric(req.body.user_fullname, "en-US", {
+        ignore: "._- ",
+      })
+    ) {
+      error_messages.push("Name can only contains letters and numbers");
+    }
 
     if (!validator.isEmail(req.body.user_email)) {
       error_messages.push("email is not valid");
