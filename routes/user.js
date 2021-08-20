@@ -26,7 +26,7 @@ const router = express.Router();
 // router
 router.post("/register", register_validator, register, get_token);
 router.post("/login", login_validator, login, get_token);
-router.get("/getMe", user, get_me);
+router.get("/getme", user, get_me);
 router.put(
   "/edit",
   upload.single("user_avatar"),
