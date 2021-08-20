@@ -56,7 +56,7 @@ const vendorSchema = new mongoose.Schema(
       type: String,
       enum: ["Organizer", "Venue"],
     },
-    vendor_has_fiiled_info: {
+    vendor_has_filled_info: {
       type: Boolean,
       default: false,
     },
@@ -87,7 +87,6 @@ function setPassword(password) {
 
 vendorSchema.post("findOneAndUpdate", async function (doc) {
   if (!doc.vendor_has_filled_info) {
-    console.log("hello");
     doc.vendor_has_filled_info = true;
     await doc.save();
   }
