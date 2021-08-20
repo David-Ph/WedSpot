@@ -13,18 +13,25 @@ class PackageController {
 
   async getPackages(req, res, next) {
     try {
-      // ? filtering
+      // ? price and capacity filtering
       const minCapacity = parseInt(req.query.min_capacity) || 0;
       const maxCapacity = parseInt(req.query.max_capacity) || 10000;
       const minPrice = parseInt(req.query.min_price) || 0;
       const maxPrice = parseInt(req.query.max_price) || 3000000000;
 
+      // ? type and location filtering
       const subQuery = {
         package_price: { $gte: minPrice, $lte: maxPrice },
       };
-      if (req.query.type) subQuery.package_type = req.query.type;
-      if (req.query.location) subQuery.package_location = req.query.location;
 
+      if (req.queryPolluted?.type) req.query.type = req.queryPolluted.type;
+      if (req.query.type) subQuery.package_type = req.query.type;
+
+      if (req.queryPolluted?.location)
+        req.query.location = req.queryPolluted.location;
+      if (req.query.location) subQuery.package_location = req.query.location;
+      console.log(req.query.type);
+      console.log(subQuery);
       // ? pagination
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;

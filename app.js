@@ -32,9 +32,6 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-// Prevent http param pollution
-app.use(hpp());
-
 // Use helmet
 app.use(
   helmet({
@@ -71,6 +68,9 @@ const errorHandler = require("./middlewares/errorHandler/errorHandler");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Prevent http param pollution
+app.use(hpp());
 
 // ? set routes
 // /////////////
