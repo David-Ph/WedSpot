@@ -3,7 +3,7 @@ const LocalStrategy = require("passport-local").Strategy; // Login but not using
 const bcrypt = require("bcrypt"); // to compare the password
 const JWTstrategy = require("passport-jwt").Strategy; // to enable jwt in passport
 const ExtractJWT = require("passport-jwt").ExtractJwt; // to extract or read jwt
-const { user } = require("../../models"); // Import user
+const { User } = require("../../models"); // Import user
 
 // Logic to signup
 exports.register = (req, res, next) => {
@@ -26,13 +26,13 @@ passport.use(
   "signup",
   new LocalStrategy(
     {
-      usernameField: "email",
-      passwordField: "password",
+      usernameField: "user_email",
+      passwordField: "user_password",
       passReqToCallback: true,
     },
     async (req, email, password, done) => {
       try {
-        const data = await user.create(req.body);
+        const data = await User.create(req.body);
 
         return done(null, data, { message: "User can be created" });
       } catch (e) {
@@ -63,19 +63,19 @@ passport.use(
   "signin",
   new LocalStrategy(
     {
-      usernameField: "email",
-      passwordField: "password",
+      usernameField: "user_email",
+      passwordField: "user_password",
       passReqToCallback: true,
     },
     async (req, email, password, done) => {
       try {
-        const data = await user.findOne({ email });
+        const data = await User.findOne({ user_email: email });
 
         if (!data) {
           return done(null, false, { message: "User is not found!" });
         }
 
-        const validate = await bcrypt.compare(password, data.password);
+        const validate = await bcrypt.compare(password, data.user_password);
 
         if (!validate) {
           return done(null, false, { message: "Wrong password!" });
@@ -115,9 +115,9 @@ passport.use(
     },
     async (token, done) => {
       try {
-        const data = await user.findOne({ _id: token.user });
+        const data = await User.findOne({ _id: token.user });
 
-        if (data.role === "user") {
+        if (data) {
           return done(null, token);
         }
 

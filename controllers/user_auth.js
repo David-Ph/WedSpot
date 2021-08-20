@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken"); // import jwt
-const { user } = require("../models");
+const { User } = require("../models");
 
 class Auth {
   async get_token(req, res, next) {
@@ -12,9 +12,9 @@ class Auth {
         expiresIn: "60d",
       });
 
-      const current_user = await user
-        .findOne({ _id: req.user._id })
-        .select("-password");
+      const current_user = await User.findOne({ _id: req.user._id }).select(
+        "-password"
+      );
 
       res.status(200).json({ token, current_user });
     } catch (error) {
@@ -24,9 +24,9 @@ class Auth {
 
   async get_me(req, res, next) {
     try {
-      const data = await user
-        .findOne({ _id: req.user.user })
-        .select("-password");
+      const data = await User.findOne({ _id: req.user.user }).select(
+        "-password"
+      );
 
       res.status(200).json({ data });
     } catch (error) {
