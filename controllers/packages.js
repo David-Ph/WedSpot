@@ -30,8 +30,7 @@ class PackageController {
       if (req.queryPolluted?.location)
         req.query.location = req.queryPolluted.location;
       if (req.query.location) subQuery.package_location = req.query.location;
-      console.log(req.query.type);
-      console.log(subQuery);
+
       // ? pagination
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
@@ -46,6 +45,8 @@ class PackageController {
         .limit(limit)
         .skip(skipCount);
 
+      let count = await Package.count(subQuery);
+
       // filter based on capacity
       data = data.filter((pack) => {
         return filterPackageCapacity(pack, minCapacity, maxCapacity);
@@ -55,7 +56,7 @@ class PackageController {
         return next({ message: "Packages not found", statusCode: 404 });
       }
 
-      res.status(200).json({ data });
+      res.status(200).json({ data, count });
     } catch (error) {
       next(error);
     }
