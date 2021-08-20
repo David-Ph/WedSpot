@@ -33,6 +33,11 @@ const packageSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    package_status: {
+      type: String,
+      default: "published",
+      enum: ["draft", "published", "archived"],
+    },
     package_album: [
       {
         type: String,
