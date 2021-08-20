@@ -31,6 +31,11 @@ class PackageController {
         req.query.location = req.queryPolluted.location;
       if (req.query.location) subQuery.package_location = req.query.location;
 
+      // if(req.user) subQuery.package_status = 'published';
+      // ? search tags
+      if (req.query.search)
+        subQuery.package_services = new RegExp(req.query.search, "i");
+
       // ? pagination
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
