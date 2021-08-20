@@ -90,7 +90,6 @@ vendorSchema.post("findOneAndUpdate", async function (doc) {
     doc.vendor_has_filled_info = true;
     await doc.save();
   }
-  console.log(doc);
 });
 
 module.exports = mongoose.model("Vendor", vendorSchema);
