@@ -1,5 +1,7 @@
 const validator = require("validator");
 const { promisify } = require("util");
+const { User } = require("../../models");
+const bcrypt = require("bcrypt"); // to compare the password
 
 exports.user_validator = async (req, res, next) => {
   try {
@@ -18,11 +20,29 @@ exports.user_validator = async (req, res, next) => {
       error_messages.push("email is not valid");
     }
 
-    if (
-      req.body.user_password &&
-      !validator.isStrongPassword(req.body.user_password)
-    ) {
-      error_messages.push("password is not strong enough");
+    // if user change password, check for old password and current password
+    if (req.body.user_password) {
+      if (req.body.user_old_password) {
+        const data = await User.findOne({ _id: req.user.user });
+
+        const validate = await bcrypt.compare(
+          req.body.user_old_password,
+          data.user_password
+        );
+
+        if (!validate) {
+          return next({ statusCode: 400, messages: "Wrong old password" });
+        }
+
+        if (!validator.isStrongPassword(req.body.user_password)) {
+          error_messages.push("password is not strong enough");
+        }
+      } else {
+        return next({
+          statusCode: 400,
+          messages: "Please input old password and new password",
+        });
+      }
     }
 
     if (req.file) {
