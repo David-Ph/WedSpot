@@ -33,39 +33,43 @@ class RequestController {
         return next({ message: "Request not found", statusCode: 404 });
       }
 
-      res.status(200).json({ data, count });
+      res.status(200).json({ data, count, count: data.length });
     } catch (error) {
       next(error);
     }
   }
 
-  async getRequestByUser(req, res, next) {
+  async getRequestsByUser(req, res, next) {
     try {
       let data = await Request.find({
         request_user_id: req.user.user,
       });
 
-      if (!data) {
+      if (data.length === 0) {
         return next({ statusCode: 404, message: "Request not found" });
       }
 
-      res.status(200).json({ data, message: "Request found!" });
+      res
+        .status(200)
+        .json({ data, message: "Request found!", count: data.length });
     } catch (error) {
       next(error);
     }
   }
 
-  async getRequestByVendor(req, res, next) {
+  async getRequestsByVendor(req, res, next) {
     try {
       let data = await Request.find({
         request_vendor_id: req.vendor.user,
       });
 
-      if (!data) {
+      if (data.length === 0) {
         return next({ statusCode: 404, message: "Request not found" });
       }
 
-      res.status(200).json({ data, message: "Request found!" });
+      res
+        .status(200)
+        .json({ data, message: "Request found!", count: data.length });
     } catch (error) {
       next(error);
     }

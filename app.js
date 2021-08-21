@@ -58,7 +58,7 @@ if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
 // const auth = require("./routes/auth");
 const vendors = require("./routes/vendors");
 const packageRouter = require("./routes/packages");
-
+const requestRouter = require("./routes/requests");
 const user_router = require("./routes/user");
 
 // ? import error handler
@@ -79,7 +79,7 @@ app.use(hpp());
 // app.use("/vendors", auth);
 app.use("/vendors", vendors);
 app.use("/packages", packageRouter);
-
+app.use("/routers", requestRouter);
 app.use("/user", user_router);
 
 app.all("*", async (req, res, next) => {
