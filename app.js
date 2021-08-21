@@ -79,7 +79,7 @@ app.use(hpp());
 // app.use("/vendors", auth);
 app.use("/vendors", vendors);
 app.use("/packages", packageRouter);
-app.use("/routers", requestRouter);
+app.use("/requests", requestRouter);
 app.use("/user", user_router);
 
 app.all("*", async (req, res, next) => {

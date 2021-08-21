@@ -15,15 +15,24 @@ const RequestController = require("../controllers/requests");
 
 // ? import validators
 // ////////////////////
+const {
+  createRequestValidator,
+  updateRequestValidator,
+} = require("../middlewares/validators/requests");
 
 // ? set routers
 // //////////////
-router.get("/", RequestController.getRequests);
-router.get("/user", RequestController.getRequestsByUser);
-router.get("/vendor", RequestController.getRequestsByVendor);
-router.put("/:id", RequestController.updateRequestStatus);
+// router.get("/", RequestController.getRequests);
+router.get("/user", user, RequestController.getRequestsByUser);
+router.get("/vendor", vendor, RequestController.getRequestsByVendor);
+router.put(
+  "/:id",
+  vendor,
+  updateRequestValidator,
+  RequestController.updateRequestStatus
+);
 router.delete("/:id", RequestController.deleteRequest);
-router.post("/", RequestController.createRequest);
+router.post("/", user, createRequestValidator, RequestController.createRequest);
 
 // ? export router
 //////////////////

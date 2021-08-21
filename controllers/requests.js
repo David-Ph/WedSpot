@@ -111,7 +111,7 @@ class RequestController {
     try {
       const newData = await Request.findOneAndUpdate(
         { _id: req.params.id },
-        req.body,
+        { request_status: req.body.request_status },
         { new: true }
       );
 
