@@ -1,4 +1,4 @@
-const { Package } = require("../../models");
+const { Package, vendor } = require("../../models");
 const validator = require("validator");
 const {
   locations,
@@ -105,6 +105,12 @@ exports.packageValidator = async (req, res, next) => {
         }
       });
     }
+
+    // set package_type as the same one with
+    // the vendor creating the package
+    const currentVendor = await vendor.findOne({ _id: req.vendor.user });
+    req.body.package_vendor_id = currentVendor._id;
+    req.body.package_type = currentVendor.vendor_type;
 
     if (errorMessages.length > 0) {
       return next({ statusCode: 400, messages: errorMessages });
