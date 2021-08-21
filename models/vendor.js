@@ -87,7 +87,6 @@ function setPassword(password) {
 
 vendorSchema.post("findOneAndUpdate", async function (doc) {
   if (!doc.vendor_has_filled_info) {
-    console.log("hello");
     doc.vendor_has_filled_info = true;
     await doc.save();
   }

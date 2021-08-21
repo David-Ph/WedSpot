@@ -4,7 +4,6 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });
 const express = require("express");
-const fileUpload = require("express-fileupload");
 const app = express();
 const fs = require("fs");
 const path = require("path");
@@ -33,9 +32,6 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-// Prevent http param pollution
-app.use(hpp());
-
 // Use helmet
 app.use(
   helmet({
@@ -59,8 +55,11 @@ if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
 }
 // ? import routes
 // ////////////////
-const auth = require("./routes/auth");
+// const auth = require("./routes/auth");
 const vendors = require("./routes/vendors");
+const packageRouter = require("./routes/packages");
+
+const user_router = require("./routes/user");
 
 // ? import error handler
 // //////////////////////
@@ -71,12 +70,17 @@ const errorHandler = require("./middlewares/errorHandler/errorHandler");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(fileUpload());
+
+// Prevent http param pollution
+app.use(hpp());
 
 // ? set routes
 // /////////////
-app.use("/vendors", auth);
+// app.use("/vendors", auth);
 app.use("/vendors", vendors);
+app.use("/packages", packageRouter);
+
+app.use("/user", user_router);
 
 app.all("*", async (req, res, next) => {
   try {

@@ -13,3 +13,5 @@ const uri = mongoose
   .catch((err) => console.log(err));
 
 exports.vendor = require("./vendor");
+exports.User = require("./user");
+exports.Package = require("./package");

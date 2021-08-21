@@ -159,7 +159,6 @@ passport.use(
     async (token, done) => {
       try {
         const data = await vendor.findOne({ _id: token.user });
-
         if (data) {
           return done(null, token);
         }
