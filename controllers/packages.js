@@ -188,6 +188,25 @@ class PackageController {
       next(error);
     }
   }
+
+  async getArchivedPackage(req, res, next) {
+    try {
+      const data = await Package.findDeleted({
+        package_vendor_id: req.vendor.user,
+      });
+
+      if (data.length === 0) {
+        return next({ statusCode: 404, message: "Package not found" });
+      }
+
+      res.status(200).json({
+        data,
+        count: data.length,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 function filterPackageCapacity(package, minCapacity, maxCapacity) {

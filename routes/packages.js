@@ -25,6 +25,7 @@ const { checkVendorValidator } = require("../middlewares/validators/vendors");
 // //////////////
 router.get("/", queryPackageValidator, PackageController.getPackages);
 router.get("/count", PackageController.getPackagesCount);
+router.get("/archive", vendor, PackageController.getArchivedPackage);
 router.get("/:id", PackageController.getPackageById);
 router.put(
   "/:id",
@@ -41,7 +42,12 @@ router.post(
   packageValidator,
   PackageController.createPackage
 );
-router.delete("/:id", vendor, PackageController.deletePackage);
+router.delete(
+  "/:id",
+  vendor,
+  checkVendorValidator,
+  PackageController.deletePackage
+);
 
 // ? export router
 //////////////////
