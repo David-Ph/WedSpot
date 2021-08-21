@@ -6,6 +6,7 @@ const upload = multer({ storage: storage });
 
 // ? Import user auth
 /////////////////////
+const { vendor } = require("../middlewares/auth/vendor");
 
 // ? import controllers
 // //////////////////////
@@ -26,16 +27,18 @@ router.get("/:id", PackageController.getPackageById);
 router.put(
   "/:id",
   upload.array("package_album"),
+  vendor,
   packageValidator,
   PackageController.updatePackage
 );
 router.post(
   "/",
   upload.array("package_album"),
+  vendor,
   packageValidator,
   PackageController.createPackage
 );
-router.delete("/:id", PackageController.deletePackage);
+router.delete("/:id", vendor, PackageController.deletePackage);
 
 // ? export router
 //////////////////
