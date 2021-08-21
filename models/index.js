@@ -15,3 +15,4 @@ const uri = mongoose
 exports.vendor = require("./vendor");
 exports.User = require("./user");
 exports.Package = require("./package");
+exports.Request = require("./request");
