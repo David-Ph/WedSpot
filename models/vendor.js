@@ -54,7 +54,7 @@ const vendorSchema = new mongoose.Schema(
     },
     vendor_type: {
       type: String,
-      enum: ["Organizer", "Venue"],
+      enum: ["organizer", "venue"],
     },
     vendor_has_filled_info: {
       type: Boolean,

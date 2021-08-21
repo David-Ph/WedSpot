@@ -4,6 +4,32 @@ const validator = require("validator");
 const mongoose = require("mongoose");
 const { locations } = require("../../config/types");
 
+exports.queryVendorValidator = async (req, res, next) => {
+  try {
+    const errorMessages = [];
+
+    if (req.query.limit) {
+      if (!validator.isInt(req.query.limit)) {
+        errorMessages.push("Please enter proper number for limit query");
+      }
+    }
+
+    if (req.query.page) {
+      if (!validator.isInt(req.query.page)) {
+        errorMessages.push("Please enter proper number for page query");
+      }
+    }
+
+    if (errorMessages.length > 0) {
+      return next({ statusCode: 400, messages: errorMessages });
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getDetailValidator = async (req, res, next) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -30,7 +56,7 @@ exports.vendorValidator = async (req, res, next) => {
       req.body.vendor_email_info &&
       !validator.isEmail(req.body.vendor_email_info)
     ) {
-      errorMessages.push("Email account should not be empty");
+      errorMessages.push("Email account is not valid");
     }
 
     if (
@@ -105,20 +131,26 @@ exports.vendorValidator = async (req, res, next) => {
     // }
     //checking limited photo size
     if (req.files) {
-      if (
-        !req.files.photo.mimetype.startsWith("image") ||
-        req.files.photo.size > 2000000
-      ) {
-        errorMessages.push("File must be an image and less than 2MB");
+      if (req.files.vendor_avatar) {
+        if (
+          !req.files.vendor_avatar[0].mimetype.startsWith("image") ||
+          req.files.vendor_avatar[0].size > 3000000
+        ) {
+          errorMessages.push("File must be an image and less than 3MB");
+        } else {
+          req.body.vendor_avatar = req.files.vendor_avatar[0].path;
+        }
       }
-      const move = promisify(req.files.photo.mv);
-      const newFileName = new Date().getTime() + "_" + req.files.photo.name;
-      await move(`./public/images/vendors/${newFileName}`);
-      req.body.photo = newFileName;
-    }
-
-    if (errorMessages.length > 0) {
-      return next({ messages: errorMessages, statusCode: 400 });
+      if (req.files.vendor_header) {
+        if (
+          !req.files.vendor_header[0].mimetype.startsWith("image") ||
+          req.files.vendor_header[0].size > 3000000
+        ) {
+          errorMessages.push("File must be an image and less than 3MB");
+        } else {
+          req.body.vendor_header = req.files.vendor_header[0].path;
+        }
+      }
     }
 
     next();

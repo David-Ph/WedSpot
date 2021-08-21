@@ -5,6 +5,7 @@ const { User } = require("../models");
 async function add_users() {
   for (let i = 0; i < 3; i++) {
     await User.create({
+      user_fullname: faker.name.findName(),
       user_email: faker.internet.email(),
       user_password: "Oke12345!",
     });

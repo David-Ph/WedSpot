@@ -37,11 +37,53 @@ class Vendors {
     }
   }
 
+  async getVendorsByPage(req, res, next) {
+    try {
+      // get the page, limit, and movies to skip based on page
+      const page = req.query.page;
+      const limit = parseInt(req.query.limit) || 15;
+      const skipCount = page > 0 ? (page - 1) * limit : 0;
+
+      const sortField = req.query.sort_by || "Wedding package";
+      const sortOrder = req.query.sort_order || "desc";
+
+      const data = await vendor
+        .find()
+        .sort({ [sortField]: sortOrder })
+        .limit(limit)
+        .skip(skipCount);
+
+      if (data.length === 0) {
+        return next({ message: "Vendor not found", statusCode: 404 });
+      }
+
+      res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getVendorById(req, res, next) {
     try {
-      let data = await vendor.findOne({
-        _id: req.params.id,
-      });
+      const page = req.query.page;
+      const limit = parseInt(req.query.limit) || 5;
+      const skipCount = page > 0 ? (page - 1) * limit : 0;
+
+      let data = await vendor
+        .findOne({
+          _id: req.vendor.user,
+        })
+        .populate({
+          path: "Packages",
+          options: {
+            limit: limit,
+            skip: skipCount,
+          },
+          populate: {
+            path: "package_id",
+            select: "_id wedding package",
+          },
+        });
 
       if (!data) {
         return next({ statusCode: 404, message: "Vendor not found" });
