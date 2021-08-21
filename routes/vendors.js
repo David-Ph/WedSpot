@@ -16,8 +16,9 @@ const { vendorValidator } = require("../middlewares/validators/vendors");
 const {
   registerValidator,
   logInValidator,
-  queryVendorValidator,
 } = require("../middlewares/validators/auth");
+const { queryVendorValidator } = require("../middlewares/validators/vendors");
+
 // Import controller
 const {
   getVendors,
@@ -55,7 +56,7 @@ router.put(
   vendor,
   updateVendor
 );
-router.get("/:id", vendors, getVendorById);
+router.get("/:id", vendor, getVendorById);
 // router.delete("/getMe", vendorValidator, deleteVendor, getMe);
 
 // Exports
