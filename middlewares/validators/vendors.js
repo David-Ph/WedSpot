@@ -1,5 +1,5 @@
 // Amri's Code
-const { vendor } = require("../../models");
+const { vendor, Package } = require("../../models");
 const validator = require("validator");
 const mongoose = require("mongoose");
 const { locations } = require("../../config/types");
@@ -156,6 +156,34 @@ exports.vendorValidator = async (req, res, next) => {
     next();
   } catch (error) {
     /* istanbul ignore next */
+    next(error);
+  }
+};
+
+exports.checkVendorValidator = async (req, res, next) => {
+  try {
+    /* Validate the user input */
+    const errorMessages = [];
+
+    const packageToModify = await Package.findById({ _id: req.params.id });
+
+    if (!packageToModify) {
+      return next({ message: "Package Not Found", statusCode: 404 });
+    }
+
+    /* check if currently logged in user
+    has same id as updatedReview's user_id */
+    const currentUser = req.vendor.user;
+    if (currentUser != packageToModify.package_vendor_id) {
+      return next({ statusCode: 403, messages: "Forbidden" });
+    }
+
+    if (errorMessages.length > 0) {
+      return next({ messages: errorMessages, statusCode: 400 });
+    }
+
+    next();
+  } catch (error) {
     next(error);
   }
 };

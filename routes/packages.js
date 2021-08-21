@@ -19,6 +19,8 @@ const {
   queryPackageValidator,
 } = require("../middlewares/validators/packages");
 
+const { checkVendorValidator } = require("../middlewares/validators/vendors");
+
 // ? set routers
 // //////////////
 router.get("/", queryPackageValidator, PackageController.getPackages);
@@ -28,6 +30,7 @@ router.put(
   "/:id",
   upload.array("package_album"),
   vendor,
+  checkVendorValidator,
   packageValidator,
   PackageController.updatePackage
 );
