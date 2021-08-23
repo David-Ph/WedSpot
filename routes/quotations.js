@@ -11,12 +11,24 @@ const { user } = require("../middlewares/auth/user");
 
 // ? import controllers
 // //////////////////////
+const QuotationController = require("../controllers/quotations");
 
 // ? import validators
 // ////////////////////
+const {
+  createQuotationValidator,
+  updateRequestValidator,
+} = require("../middlewares/validators/quotations");
 
 // ? set routers
 // //////////////
+// router.get('/', QuotationController.getQuotations);
+router.get("/user", user, QuotationController.getQuotationByUser);
+router.get("/vendor", vendor, QuotationController.getQuotationByVendor);
+router.get("/:id", QuotationController.getQuotationByVendor);
+router.post("/", vendor, QuotationController.createQuotation);
+router.put("/:id", user, QuotationController.updateQuotationStatus);
+router.delete("/:id", QuotationController.deleteQuotation);
 
 // ? export router
 //////////////////
