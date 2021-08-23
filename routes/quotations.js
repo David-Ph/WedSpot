@@ -25,7 +25,7 @@ const {
 // router.get('/', QuotationController.getQuotations);
 router.get("/user", user, QuotationController.getQuotationByUser);
 router.get("/vendor", vendor, QuotationController.getQuotationByVendor);
-router.get("/:id", QuotationController.getQuotationByVendor);
+router.get("/:id", QuotationController.getQuotationById);
 router.post(
   "/",
   upload.single("quotation_file"),

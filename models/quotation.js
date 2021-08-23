@@ -47,6 +47,21 @@ const quotationSchema = new mongoose.Schema(
   }
 );
 
+// Static method to get average rating
+quotationSchema.statics.updateRequestStatus = async function (request_id) {
+  try {
+    await this.model("Request").findByIdAndUpdate(request_id, {
+      request_status: true,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+quotationSchema.post("save", function () {
+  this.constructor.updateRequestStatus(this.quotation_request_id);
+});
+
 // Enable soft delete, it will make delete column automaticly
 quotationSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 
