@@ -12,4 +12,8 @@ const uri = mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
+exports.vendor = require("./vendor");
 exports.User = require("./user");
+exports.Package = require("./package");
+exports.Request = require("./request");
+exports.Quotation = require("./quotation");

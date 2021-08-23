@@ -32,9 +32,6 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-// Prevent http param pollution
-app.use(hpp());
-
 // Use helmet
 app.use(
   helmet({
@@ -58,8 +55,12 @@ if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
 }
 // ? import routes
 // ////////////////
-
+// const auth = require("./routes/auth");
+const vendors = require("./routes/vendors");
+const packageRouter = require("./routes/packages");
+const requestRouter = require("./routes/requests");
 const user_router = require("./routes/user");
+const quotationsRouter = require("./routes/quotations");
 
 // ? import error handler
 // //////////////////////
@@ -71,9 +72,16 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Prevent http param pollution
+app.use(hpp());
+
 // ? set routes
 // /////////////
-
+// app.use("/vendors", auth);
+app.use("/vendors", vendors);
+app.use("/quotations", quotationsRouter);
+app.use("/packages", packageRouter);
+app.use("/requests", requestRouter);
 app.use("/user", user_router);
 
 app.all("*", async (req, res, next) => {

@@ -8,6 +8,7 @@ async function add_users() {
       user_fullname: faker.name.findName(),
       user_email: faker.internet.email(),
       user_password: "Oke12345!",
+      user_avatar: faker.image.avatar(),
     });
   }
   console.log("Users has been seeded");
