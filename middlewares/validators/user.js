@@ -4,16 +4,19 @@ const { User } = require("../../models");
 const bcrypt = require("bcrypt"); // to compare the password
 
 exports.user_validator = async (req, res, next) => {
+  console.log(req.body);
+  console.log(req.files);
+
   try {
     const error_messages = [];
 
     if (
       req.body.user_fullname &&
       !validator.isAlphanumeric(req.body.user_fullname, "en-US", {
-        ignore: "._- ",
+        ignore: " ",
       })
     ) {
-      errorMessages.push("Name can only contains letters and numbers");
+      error_messages.push("Name can only contains letters and numbers");
     }
 
     if (req.body.user_email && !validator.isEmail(req.body.user_email)) {

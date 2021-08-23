@@ -38,7 +38,9 @@ const userSchema = new mongoose.Schema(
       getters: true,
       versionKey: false,
       transform: function (doc, ret) {
+        ret.user_id = ret._id;
         delete ret.id;
+        delete ret._id;
         delete ret.deleted;
       },
     },
