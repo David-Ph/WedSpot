@@ -1,11 +1,15 @@
 const validator = require("validator");
 const { promisify } = require("util");
 const { User } = require("../../models");
-const bcrypt = require("bcrypt"); // to compare the password
+const bcrypt = require("bcrypt");
 
 exports.user_validator = async (req, res, next) => {
   try {
     const error_messages = [];
+
+    if (validator.isEmpty(req.body.user_fullname)) {
+      error_messages.push("Fullname can not be empty");
+    }
 
     if (
       req.body.user_fullname &&
@@ -20,8 +24,12 @@ exports.user_validator = async (req, res, next) => {
       error_messages.push("email is not valid");
     }
 
-    // if user change password, check for old password and current password
+    if (req.body.user_birthday && !validator.isDate(req.body.user_birthday)) {
+      error_messages.push("Birthday is not valid");
+    }
+
     if (req.body.user_password) {
+      // if user change password, check for old password and current password
       if (req.body.user_old_password) {
         const data = await User.findOne({ _id: req.user.user });
 
