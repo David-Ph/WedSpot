@@ -22,7 +22,7 @@ const quotationSchema = new mongoose.Schema(
       type: String,
       required: [true, "quotation_file can't be empty"],
     },
-    request_status: {
+    quotation_status: {
       type: Boolean,
       default: false,
     },
@@ -50,4 +50,4 @@ const quotationSchema = new mongoose.Schema(
 // Enable soft delete, it will make delete column automaticly
 quotationSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 
-module.exports = mongoose.model("Request", quotationSchema); // Export transaction models
+module.exports = mongoose.model("Quotation", quotationSchema); // Export transaction models

@@ -26,8 +26,18 @@ const {
 router.get("/user", user, QuotationController.getQuotationByUser);
 router.get("/vendor", vendor, QuotationController.getQuotationByVendor);
 router.get("/:id", QuotationController.getQuotationByVendor);
-router.post("/", vendor, QuotationController.createQuotation);
-router.put("/:id", user, QuotationController.updateQuotationStatus);
+router.post(
+  "/",
+  vendor,
+  createQuotationValidator,
+  QuotationController.createQuotation
+);
+router.put(
+  "/:id",
+  user,
+  updateRequestValidator,
+  QuotationController.updateQuotationStatus
+);
 router.delete("/:id", QuotationController.deleteQuotation);
 
 // ? export router
