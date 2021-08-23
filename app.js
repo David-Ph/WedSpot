@@ -61,6 +61,7 @@ const packageRouter = require("./routes/packages");
 const requestRouter = require("./routes/requests");
 const user_router = require("./routes/user");
 const quotationsRouter = require("./routes/quotations");
+const configRouter = require("./routes/config");
 
 // ? import error handler
 // //////////////////////
@@ -83,6 +84,7 @@ app.use("/quotations", quotationsRouter);
 app.use("/packages", packageRouter);
 app.use("/requests", requestRouter);
 app.use("/user", user_router);
+app.use("/config", configRouter);
 
 app.all("*", async (req, res, next) => {
   try {
