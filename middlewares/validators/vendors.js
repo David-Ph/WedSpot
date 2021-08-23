@@ -153,6 +153,9 @@ exports.vendorValidator = async (req, res, next) => {
       }
     }
 
+    if (errorMessages.length > 0) {
+      return next({ messages: errorMessages, statusCode: 400 });
+    }
     next();
   } catch (error) {
     /* istanbul ignore next */

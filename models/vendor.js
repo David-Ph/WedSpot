@@ -85,6 +85,13 @@ function setPassword(password) {
   return bcrypt.hashSync(password, 10);
 }
 
+vendorSchema.virtual("packages", {
+  ref: "Package",
+  localField: "_id",
+  foreignField: "package_vendor_id",
+  justOne: false,
+});
+
 vendorSchema.post("findOneAndUpdate", async function (doc) {
   if (!doc.vendor_has_filled_info) {
     doc.vendor_has_filled_info = true;

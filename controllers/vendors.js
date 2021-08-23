@@ -13,48 +13,53 @@ class Vendors {
 
   async getVendors(req, res, next) {
     try {
-      // get the page, limit, and vendors to skip based on page
+      // ? pagination
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
-      const skipCount = page > 0 ? (page - 1) * limit : 0;
+      const skip = page > 0 ? (page - 1) * limit : 0;
 
-      const sortField = req.query.sort_by || "created_at";
-      const orderBy = req.query.order_by || "desc";
+      let data = await vendor.find();
 
-      const data = await vendor
-        .find()
-        .sort({ [sortField]: orderBy })
-        .limit(limit)
-        .skip(skipCount);
+      // // ? price and capacity filtering
+      // const minCapacity = parseInt(req.query.min_capacity) || 0;
+      // const maxCapacity = parseInt(req.query.max_capacity) || 10000;
+      // const minPrice = parseInt(req.query.min_price) || 0;
+      // const maxPrice = parseInt(req.query.max_price) || 3000000000;
+
+      // // ? type and location filtering
+      // const subQuery = {
+      //   package_price: { $gte: minPrice, $lte: maxPrice },
+      // };
+
+      // if (req.queryPolluted?.type) req.query.type = req.queryPolluted.type;
+      // if (req.query.type) subQuery.vendor_type = req.query.type;
+
+      // if (req.queryPolluted?.location)
+      //   req.query.location = req.queryPolluted.location;
+      // if (req.query.location) subQuery.vendor_location = req.query.location;
+
+      // // if(req.user) subQuery.package_status = 'published';
+      // // ? search tags
+      // if (req.query.search)
+      //   subQuery.vendor_types = new RegExp(req.query.search, "i");
+
+      // // ? sorting
+      // const sortField = req.query.sort_by || "created_at";
+      // const orderBy = req.query.order_by || "desc";
+
+      //   .sort({ [sortField]: orderBy })
+      //   .limit(limit)
+      //   .skip(skipCount);
+
+      // let count = await vendor.count(subQuery);
+
+      // // filter based on capacity
+      // data = data.filter((ven) => {
+      //   return filterVendorCapacity(ven, minCapacity, maxCapacity);
+      // });
 
       if (data.length === 0) {
-        return next({ message: "Vendor not found", statusCode: 404 });
-      }
-
-      res.status(200).json({ data });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async getVendorsByPage(req, res, next) {
-    try {
-      // get the page, limit, and movies to skip based on page
-      const page = req.query.page;
-      const limit = parseInt(req.query.limit) || 15;
-      const skipCount = page > 0 ? (page - 1) * limit : 0;
-
-      const sortField = req.query.sort_by || "Wedding package";
-      const sortOrder = req.query.sort_order || "desc";
-
-      const data = await vendor
-        .find()
-        .sort({ [sortField]: sortOrder })
-        .limit(limit)
-        .skip(skipCount);
-
-      if (data.length === 0) {
-        return next({ message: "Vendor not found", statusCode: 404 });
+        return next({ message: "Vendors not found", statusCode: 404 });
       }
 
       res.status(200).json({ data });
@@ -71,17 +76,13 @@ class Vendors {
 
       let data = await vendor
         .findOne({
-          _id: req.vendor.user,
+          _id: req.params.id,
         })
         .populate({
-          path: "Packages",
+          path: "packages",
           options: {
             limit: limit,
             skip: skipCount,
-          },
-          populate: {
-            path: "package_id",
-            select: "_id wedding package",
           },
         });
 
@@ -114,21 +115,21 @@ class Vendors {
       next(error);
     }
   }
-
-  async deleteVendor(req, res, next) {
-    try {
-      //   for soft delete
-      const data = await vendor.deleteById(req.params.id);
-
-      if (data.nModified === 0) {
-        return next({ statusCode: 404, message: "Vendor not found" });
-      }
-
-      res.status(200).json({ message: "Vendor successfully deleted" });
-    } catch (error) {
-      next(error);
-    }
-  }
 }
+
+//   async deleteVendor(req, res, next) {
+//     try {
+//       //   for soft delete
+//       const data = await vendor.deleteById(req.params.id);
+
+//       if (data.nModified === 0) {
+//         return next({ statusCode: 404, message: "Vendor not found" });
+//       }
+
+//       res.status(200).json({ message: "Vendor successfully deleted" });
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
 
 module.exports = new Vendors();
