@@ -28,6 +28,7 @@ router.get("/vendor", vendor, QuotationController.getQuotationByVendor);
 router.get("/:id", QuotationController.getQuotationByVendor);
 router.post(
   "/",
+  upload.single("quotation_file"),
   vendor,
   createQuotationValidator,
   QuotationController.createQuotation

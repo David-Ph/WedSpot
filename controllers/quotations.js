@@ -42,7 +42,7 @@ class QuotationController {
   async getQuotationByUser(req, res, next) {
     try {
       let data = await Quotation.find({
-        request_user_id: req.user.user,
+        quotation_user_id: req.user.user,
       });
 
       if (data.length === 0) {
@@ -60,7 +60,7 @@ class QuotationController {
   async getQuotationByVendor(req, res, next) {
     try {
       let data = await Quotation.find({
-        request_vendor_id: req.vendor.user,
+        quotation_vendor_id: req.vendor.user,
       });
 
       if (data.length === 0) {
@@ -111,7 +111,7 @@ class QuotationController {
     try {
       const newData = await Quotation.findOneAndUpdate(
         { _id: req.params.id },
-        { request_status: req.body.request_status },
+        { quotation_status: req.body.quotation_status },
         { new: true }
       );
 
