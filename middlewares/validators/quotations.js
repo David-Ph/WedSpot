@@ -52,6 +52,10 @@ exports.createQuotationValidator = async (req, res, next) => {
     });
     req.body.quotation_user_id = getRequest.request_user_id;
 
+    if (!getRequest) {
+      errorMessages.push("Package not found!");
+    }
+
     if (req.file) {
       req.body.quotation_file = req.file.path;
     }

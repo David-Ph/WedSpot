@@ -52,6 +52,10 @@ exports.createRequestValidator = async (req, res, next) => {
     });
     req.body.request_vendor_id = getPackage.package_vendor_id;
 
+    if (!getPackage) {
+      errorMessages.push("Package not found!");
+    }
+
     if (errorMessages.length > 0) {
       return next({ statusCode: 400, messages: errorMessages });
     }
