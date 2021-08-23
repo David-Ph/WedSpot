@@ -25,6 +25,7 @@ const {
 // router.get("/", RequestController.getRequests);
 router.get("/user", user, RequestController.getRequestsByUser);
 router.get("/vendor", vendor, RequestController.getRequestsByVendor);
+router.get("/:id", RequestController.getRequestById);
 router.put(
   "/:id",
   vendor,
