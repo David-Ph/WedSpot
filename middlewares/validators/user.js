@@ -4,9 +4,6 @@ const { User } = require("../../models");
 const bcrypt = require("bcrypt"); // to compare the password
 
 exports.user_validator = async (req, res, next) => {
-  console.log(req.body);
-  console.log(req.files);
-
   try {
     const error_messages = [];
 

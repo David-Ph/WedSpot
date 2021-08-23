@@ -7,7 +7,7 @@ exports.register_validator = async (req, res, next) => {
     if (
       req.body.user_fullname &&
       !validator.isAlphanumeric(req.body.user_fullname, "en-US", {
-        ignore: "._- ",
+        ignore: " ",
       })
     ) {
       error_messages.push("Name can only contains letters and numbers");
