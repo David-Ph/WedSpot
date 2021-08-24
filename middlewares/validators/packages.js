@@ -62,6 +62,9 @@ exports.packageValidator = async (req, res, next) => {
           "Invalid package_capacity format. Example: '50-250'"
         );
       }
+
+      req.body.package_min_capacity = array[0];
+      req.body.package_max_capacity = array[1];
     }
 
     // check for package_services validity

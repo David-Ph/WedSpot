@@ -21,9 +21,16 @@ class PackageController {
 
       // ? type and location filtering
       const subQuery = {
-        package_status: "published",
+        package_min_capacity: { $lte: maxCapacity },
+        package_max_capacity: { $gte: minCapacity },
         package_price: { $gte: minPrice, $lte: maxPrice },
       };
+
+      // if there is req.vendor.user, show packages for that vendor
+      // otherwise, show packages for visitors/users
+      req.vendor?.user
+        ? (subQuery.package_vendor_id = req.vendor.user)
+        : (subQuery.package_status = "published");
 
       if (req.queryPolluted?.type) req.query.type = req.queryPolluted.type;
       if (req.query.type) subQuery.package_type = req.query.type;
@@ -32,7 +39,6 @@ class PackageController {
         req.query.location = req.queryPolluted.location;
       if (req.query.location) subQuery.package_location = req.query.location;
 
-      // if(req.user) subQuery.package_status = 'published';
       // ? search tags
       if (req.query.search)
         subQuery.package_services = new RegExp(req.query.search, "i");
@@ -52,11 +58,6 @@ class PackageController {
         .skip(skipCount);
 
       let count = await Package.count(subQuery);
-
-      // filter based on capacity
-      data = data.filter((pack) => {
-        return filterPackageCapacity(pack, minCapacity, maxCapacity);
-      });
 
       if (data.length === 0) {
         return next({ message: "Packages not found", statusCode: 404 });
@@ -79,6 +80,41 @@ class PackageController {
       }
 
       res.status(200).json({ data, message: "Package found!" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // to get packages by vendor id
+  async getPackagesByVendorId(req, res, next) {
+    try {
+      // ? pagination
+      const page = req.query.page;
+      const limit = parseInt(req.query.limit) || 15;
+      const skipCount = page > 0 ? (page - 1) * limit : 0;
+
+      // ? sorting
+      const sortField = req.query.sort_by || "created_at";
+      const orderBy = req.query.order_by || "desc";
+
+      let data = await Package.find({
+        package_status: "published",
+        package_vendor_id: req.params.vendor_id,
+      })
+        .sort({ [sortField]: orderBy })
+        .limit(limit)
+        .skip(skipCount);
+
+      let count = await Package.count({
+        package_status: "published",
+        package_vendor_id: req.params.vendor_id,
+      });
+
+      if (data.length === 0) {
+        return next({ message: "Packages not found", statusCode: 404 });
+      }
+
+      res.status(200).json({ data, count });
     } catch (error) {
       next(error);
     }
@@ -153,13 +189,6 @@ class PackageController {
       next(error);
     }
   }
-}
-
-function filterPackageCapacity(package, minCapacity, maxCapacity) {
-  const packageMinCapacity = parseInt(package.package_capacity.split("-")[0]);
-  const packageMaxCapacity = parseInt(package.package_capacity.split("-")[1]);
-  // (s1 <= e2) && (s2 <= e1)
-  return minCapacity <= packageMaxCapacity && packageMinCapacity <= maxCapacity;
 }
 
 module.exports = new PackageController();

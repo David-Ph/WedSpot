@@ -22,8 +22,11 @@ const packageSchema = new mongoose.Schema(
     package_price: {
       type: Number,
     },
-    package_capacity: {
-      type: String,
+    package_min_capacity: {
+      type: Number,
+    },
+    package_max_capacity: {
+      type: Number,
     },
     package_details: {
       type: String,

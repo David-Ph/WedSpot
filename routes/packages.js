@@ -24,6 +24,17 @@ const { checkVendorValidator } = require("../middlewares/validators/vendors");
 // ? set routers
 // //////////////
 router.get("/", queryPackageValidator, PackageController.getPackages);
+router.get(
+  "/vendor",
+  vendor,
+  queryPackageValidator,
+  PackageController.getPackages
+);
+router.get(
+  "/view/:vendor_id",
+  queryPackageValidator,
+  PackageController.getPackagesByVendorId
+);
 router.get("/count", PackageController.getPackagesCount);
 router.get("/archive", vendor, PackageController.getArchivedPackage);
 router.get("/:id", PackageController.getPackageById);

@@ -21,6 +21,8 @@ async function addPackages() {
         services = organizerServices;
       }
 
+      const randomIndex = Math.floor(Math.random() * sampleCapacity.length);
+
       const newPackage = await Package.create({
         package_vendor_id: vendors[vendorIndex]._id,
         package_type: vendors[vendorIndex].vendor_type,
@@ -31,8 +33,8 @@ async function addPackages() {
         package_price:
           samplePrices[Math.floor(Math.random() * samplePrices.length)],
         package_services: services,
-        package_capacity:
-          sampleCapacity[Math.floor(Math.random() * sampleCapacity.length)],
+        package_min_capacity: sampleCapacity[randomIndex].min,
+        package_max_capacity: sampleCapacity[randomIndex].max,
         package_album: [
           faker.image.nature(),
           faker.image.nature(),

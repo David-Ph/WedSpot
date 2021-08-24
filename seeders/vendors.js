@@ -1,7 +1,7 @@
 const faker = require("faker");
 const {
   locations,
-  sampleCapacity,
+  sampleCapacityRanges,
   samplePriceRanges,
 } = require("../config/services");
 const { vendor } = require("../models");
@@ -27,7 +27,9 @@ async function addVendors() {
       vendor_price_range:
         samplePriceRanges[Math.floor(Math.random() * samplePriceRanges.length)],
       vendor_capacity:
-        sampleCapacity[Math.floor(Math.random() * sampleCapacity.length)],
+        sampleCapacityRanges[
+          Math.floor(Math.random() * sampleCapacityRanges.length)
+        ],
     });
   }
   for (let i = 0; i < 3; i++) {
@@ -49,7 +51,9 @@ async function addVendors() {
       vendor_price_range:
         samplePriceRanges[Math.floor(Math.random() * samplePriceRanges.length)],
       vendor_capacity:
-        sampleCapacity[Math.floor(Math.random() * sampleCapacity.length)],
+        sampleCapacityRanges[
+          Math.floor(Math.random() * sampleCapacityRanges.length)
+        ],
     });
   }
 

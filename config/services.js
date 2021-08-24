@@ -36,6 +36,17 @@ const samplePriceRanges = [
 ];
 
 const sampleCapacity = [
+  { min: 50, max: 250 },
+  { min: 500, max: 1500 },
+  { min: 250, max: 500 },
+  { min: 500, max: 750 },
+  { min: 500, max: 2500 },
+  { min: 1500, max: 3000 },
+  { min: 0, max: 500 },
+  { min: 1000, max: 2500 },
+];
+
+const sampleCapacityRanges = [
   "50-250",
   "500-1500",
   "250-500",
@@ -53,4 +64,5 @@ module.exports = {
   samplePrices,
   sampleCapacity,
   samplePriceRanges,
+  sampleCapacityRanges,
 };
