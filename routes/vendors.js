@@ -38,7 +38,6 @@ const router = express.Router();
 router.post("/register", registerValidator, register, getToken);
 router.post("/login", logInValidator, login, getToken);
 router.get("/", queryVendorValidator, getVendors);
-// router.get("/page", queryVendorValidator, vendor, getVendorsByPage);
 router.get("/getMe", vendor, getMe);
 router.get("/:id", getVendorById);
 router.put(
