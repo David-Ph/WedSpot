@@ -14,11 +14,11 @@ class Vendors {
   async getVendors(req, res, next) {
     try {
       // ? pagination
-      const page = req.query.page;
-      const limit = parseInt(req.query.limit) || 15;
-      const skip = page > 0 ? (page - 1) * limit : 0;
-
-      let data = await vendor.find();
+      const { page = 1, limit = 10 } = req.query;
+      let data = await vendor
+        .find()
+        .limit(limit * 1)
+        .skip((page - 1) * limit);
 
       // // ? price and capacity filtering
       // const minCapacity = parseInt(req.query.min_capacity) || 0;

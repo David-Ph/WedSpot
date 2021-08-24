@@ -41,7 +41,7 @@ exports.logInValidator = async (req, res, next) => {
       req.body.vendor_password &&
       !validator.isStrongPassword(req.body.vendor_password)
     ) {
-      errorMessages.push("password is not strong");
+      errorMessages.push("Wrong password");
     }
 
     if (errorMessages.length > 0) {
