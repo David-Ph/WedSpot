@@ -46,10 +46,24 @@ exports.createRequestValidator = async (req, res, next) => {
     const getUser = await User.findOne({ _id: req.user.user });
     req.body.request_user_id = getUser._id;
 
+    let userRequests = await Request.find({
+      request_user_id: getUser._id,
+      request_status: "false",
+    });
+
+    userRequests = userRequests.filter((request) => {
+      return request.request_package_id._id == req.body.request_package_id;
+    });
+
+    if (userRequests.length > 0) {
+      errorMessages.push("Your previous request has not been responded");
+    }
+
     // get package and vendor data based on req.body.request_package_id
     const getPackage = await Package.findOne({
       _id: req.body.request_package_id,
     });
+    req.body.request_package_id = getPackage;
     req.body.request_vendor_id = getPackage.package_vendor_id;
 
     if (!getPackage) {
