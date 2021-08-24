@@ -50,6 +50,7 @@ exports.createRequestValidator = async (req, res, next) => {
     const getPackage = await Package.findOne({
       _id: req.body.request_package_id,
     });
+    req.body.request_package_id = getPackage;
     req.body.request_vendor_id = getPackage.package_vendor_id;
 
     if (!getPackage) {

@@ -14,8 +14,7 @@ const requestSchema = new mongoose.Schema(
       required: [true, "request_vendor_id can't be empty"],
     },
     request_package_id: {
-      type: mongoose.Types.ObjectId,
-      ref: "Package",
+      type: mongoose.Schema.Types.Mixed,
       required: [true, "request_package_id can't be empty"],
     },
     request_groom_name: {
