@@ -60,6 +60,10 @@ exports.createQuotationValidator = async (req, res, next) => {
       req.body.quotation_file = req.file.path;
     }
 
+    if (req.body.quotation_status) {
+      req.body.quotation_status = null;
+    }
+
     if (errorMessages.length > 0) {
       return next({ statusCode: 400, messages: errorMessages });
     }
