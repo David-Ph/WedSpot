@@ -63,6 +63,13 @@ const requestSchema = new mongoose.Schema(
   }
 );
 
+requestSchema.virtual("quotation", {
+  ref: "Quotation",
+  localField: "_id",
+  foreignField: "quotation_request_id",
+  justOne: false,
+});
+
 // Enable soft delete, it will make delete column automaticly
 requestSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 

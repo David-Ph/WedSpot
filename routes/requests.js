@@ -18,7 +18,6 @@ const RequestController = require("../controllers/requests");
 const {
   createRequestValidator,
   updateRequestValidator,
-  getRequestValidator,
 } = require("../middlewares/validators/requests");
 
 // ? set routers
@@ -26,7 +25,7 @@ const {
 // router.get("/", RequestController.getRequests);
 router.get("/user", user, RequestController.getRequestsByUser);
 router.get("/vendor", vendor, RequestController.getRequestsByVendor);
-router.get("/:id", getRequestValidator, RequestController.getRequestById);
+router.get("/:id", RequestController.getRequestById);
 // router.put(
 //   "/:id",
 //   vendor,

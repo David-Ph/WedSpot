@@ -50,10 +50,10 @@ exports.createQuotationValidator = async (req, res, next) => {
     const getRequest = await Request.findOne({
       _id: req.body.quotation_request_id,
     });
-    req.body.quotation_user_id = getRequest.request_user_id;
+    req.body.quotation_user_id = getRequest?.request_user_id;
 
     if (!getRequest) {
-      errorMessages.push("Package not found!");
+      errorMessages.push("Request not found!");
     }
 
     if (req.file) {
@@ -77,11 +77,18 @@ exports.updateRequestValidator = async (req, res, next) => {
     const getQuotation = await Quotation.findOne({ _id: req.params.id });
 
     if (!getQuotation) {
-      return next({ statusCode: 404, messages: "Request not found" });
+      return next({ statusCode: 404, messages: "Quotation not found" });
     }
 
     if (req.user.user != getQuotation.quotation_user_id) {
       return next({ statusCode: 401, messages: "Forbidden acccess" });
+    }
+
+    if (
+      req.body.quotation_status != "accepted" &&
+      req.body.quotation_status != "rejected"
+    ) {
+      errorMessages.push("Invalid quotation status");
     }
 
     if (errorMessages.length > 0) {

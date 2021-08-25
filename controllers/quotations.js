@@ -107,7 +107,7 @@ class QuotationController {
     try {
       let data = await Quotation.findOne({
         _id: req.params.id,
-      });
+      }).populate("quotation_request_id");
 
       if (!data) {
         return next({ statusCode: 404, message: "Quotation not found" });

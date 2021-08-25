@@ -79,6 +79,7 @@ class RequestController {
       };
 
       if (req.query.status) subQuery.request_status = req.query.status;
+
       // ? pagination
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
@@ -109,7 +110,7 @@ class RequestController {
     try {
       let data = await Request.findOne({
         _id: req.params.id,
-      });
+      }).populate("quotation");
 
       if (!data) {
         return next({ statusCode: 404, message: "Request not found" });

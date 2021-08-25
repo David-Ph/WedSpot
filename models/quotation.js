@@ -23,8 +23,9 @@ const quotationSchema = new mongoose.Schema(
       required: [true, "quotation_file can't be empty"],
     },
     quotation_status: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: null,
+      enum: ["accepted", "rejected", null],
     },
   },
   {
