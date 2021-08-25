@@ -73,6 +73,12 @@ class RequestController {
 
   async getRequestsByVendor(req, res, next) {
     try {
+      // ? filtering by status
+      let subQuery = {
+        request_vendor_id: req.vendor.user,
+      };
+
+      if (req.query.status) subQuery.request_status = req.query.status;
       // ? pagination
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
@@ -82,16 +88,12 @@ class RequestController {
       const sortField = req.query.sort_by || "created_at";
       const orderBy = req.query.order_by || "desc";
 
-      let data = await Request.find({
-        request_vendor_id: req.vendor.user,
-      })
+      let data = await Request.find(subQuery)
         .sort({ [sortField]: orderBy })
         .limit(limit)
         .skip(skipCount);
 
-      let count = await Request.count({
-        request_vendor_id: req.vendor.user,
-      });
+      let count = await Request.count(subQuery);
 
       if (data.length === 0) {
         return next({ statusCode: 404, message: "Request not found" });
