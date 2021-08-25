@@ -90,10 +90,35 @@ exports.updateRequestValidator = async (req, res, next) => {
       return next({ statusCode: 404, messages: "Request not found" });
     }
 
-    console.log(req.vendor.user);
-    console.log(getRequest);
-
     if (req.vendor.user != getRequest.request_vendor_id) {
+      return next({ statusCode: 401, messages: "Forbidden acccess" });
+    }
+
+    if (errorMessages.length > 0) {
+      return next({ statusCode: 400, messages: errorMessages });
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getRequestValidator = async (req, res, next) => {
+  try {
+    const errorMessages = [];
+
+    const getRequest = await Request.findOne({ _id: req.params.id });
+
+    if (!getRequest) {
+      return next({ statusCode: 404, messages: "Request not found" });
+    }
+
+    if (req.user?.user != getRequest.request_user_id) {
+      return next({ statusCode: 401, messages: "Forbidden acccess" });
+    }
+
+    if (req.vendor?.user != getRequest.request_vendor_id) {
       return next({ statusCode: 401, messages: "Forbidden acccess" });
     }
 
