@@ -11,20 +11,31 @@ exports.user_validator = async (req, res, next) => {
       error_messages.push("Fullname can not be empty");
     }
 
+    if (req.body.user_fullname.length < 3) {
+      error_messages.push("Fullname characters minimal is 3");
+    }
+
     if (
-      req.body.user_fullname &&
       !validator.isAlphanumeric(req.body.user_fullname, "en-US", {
         ignore: " ",
       })
     ) {
-      error_messages.push("Name can only contains letters and numbers");
+      error_messages.push("Fullname can only contains letters and numbers");
     }
 
-    if (req.body.user_email && !validator.isEmail(req.body.user_email)) {
+    if (validator.isEmpty(req.body.user_email)) {
+      error_messages.push("Please input your email");
+    }
+
+    if (!validator.isEmail(req.body.user_email)) {
       error_messages.push("email is not valid");
     }
 
-    if (req.body.user_birthday && !validator.isDate(req.body.user_birthday)) {
+    if (validator.isEmpty(req.body.user_birthday)) {
+      error_messages.push("Please input your birthday");
+    }
+
+    if (!validator.isDate(req.body.user_birthday)) {
       error_messages.push("Birthday is not valid");
     }
 
