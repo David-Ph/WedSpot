@@ -114,6 +114,10 @@ exports.getRequestValidator = async (req, res, next) => {
       return next({ statusCode: 404, messages: "Request not found" });
     }
 
+    if (!req.user && !req.vendor) {
+      return next({ statusCode: 403, messages: "no auth token" });
+    }
+
     if (req.user?.user != getRequest.request_user_id) {
       return next({ statusCode: 401, messages: "Forbidden acccess" });
     }

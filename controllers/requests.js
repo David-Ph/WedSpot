@@ -41,7 +41,23 @@ class RequestController {
 
   async getRequestsByUser(req, res, next) {
     try {
+      // ? pagination
+      const page = req.query.page;
+      const limit = parseInt(req.query.limit) || 15;
+      const skipCount = page > 0 ? (page - 1) * limit : 0;
+
+      // ? sorting
+      const sortField = req.query.sort_by || "created_at";
+      const orderBy = req.query.order_by || "desc";
+
       let data = await Request.find({
+        request_user_id: req.user.user,
+      })
+        .sort({ [sortField]: orderBy })
+        .limit(limit)
+        .skip(skipCount);
+
+      let count = await Request.count({
         request_user_id: req.user.user,
       });
 
@@ -49,9 +65,7 @@ class RequestController {
         return next({ statusCode: 404, message: "Request not found" });
       }
 
-      res
-        .status(200)
-        .json({ data, message: "Request found!", count: data.length });
+      res.status(200).json({ data, message: "Request found!", count });
     } catch (error) {
       next(error);
     }
@@ -59,7 +73,23 @@ class RequestController {
 
   async getRequestsByVendor(req, res, next) {
     try {
+      // ? pagination
+      const page = req.query.page;
+      const limit = parseInt(req.query.limit) || 15;
+      const skipCount = page > 0 ? (page - 1) * limit : 0;
+
+      // ? sorting
+      const sortField = req.query.sort_by || "created_at";
+      const orderBy = req.query.order_by || "desc";
+
       let data = await Request.find({
+        request_vendor_id: req.vendor.user,
+      })
+        .sort({ [sortField]: orderBy })
+        .limit(limit)
+        .skip(skipCount);
+
+      let count = await Request.count({
         request_vendor_id: req.vendor.user,
       });
 
@@ -67,9 +97,7 @@ class RequestController {
         return next({ statusCode: 404, message: "Request not found" });
       }
 
-      res
-        .status(200)
-        .json({ data, message: "Request found!", count: data.length });
+      res.status(200).json({ data, message: "Request found!", count });
     } catch (error) {
       next(error);
     }
