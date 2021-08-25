@@ -12,9 +12,11 @@ class Auth {
         expiresIn: "60d",
       });
 
-      const current_user = await User.findOne({ _id: req.user._id }).select(
-        "-password"
-      );
+      const current_user = await User.findOne({ _id: req.user._id }).select([
+        "-user_password",
+        "-created_At",
+        "-updated_At",
+      ]);
 
       res.status(200).json({ token, current_user });
     } catch (error) {
@@ -25,7 +27,7 @@ class Auth {
   async get_me(req, res, next) {
     try {
       const data = await User.findOne({ _id: req.user.user }).select(
-        "-password"
+        "-user_password"
       );
 
       res.status(200).json({ data });

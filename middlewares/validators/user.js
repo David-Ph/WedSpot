@@ -48,7 +48,7 @@ exports.user_validator = async (req, res, next) => {
       } else {
         return next({
           statusCode: 400,
-          messages: "Please input old password and new password",
+          messages: "Please input old password",
         });
       }
     }

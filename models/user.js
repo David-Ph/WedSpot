@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
     },
     user_fullname: {
       type: String,
+      required: true,
     },
     user_birthday: {
       type: String,
