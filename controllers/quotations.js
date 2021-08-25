@@ -41,7 +41,23 @@ class QuotationController {
 
   async getQuotationByUser(req, res, next) {
     try {
+      // ? pagination
+      const page = req.query.page;
+      const limit = parseInt(req.query.limit) || 15;
+      const skipCount = page > 0 ? (page - 1) * limit : 0;
+
+      // ? sorting
+      const sortField = req.query.sort_by || "created_at";
+      const orderBy = req.query.order_by || "desc";
+
       let data = await Quotation.find({
+        quotation_user_id: req.user.user,
+      })
+        .sort({ [sortField]: orderBy })
+        .limit(limit)
+        .skip(skipCount);
+
+      let count = await Quotation.count({
         quotation_user_id: req.user.user,
       });
 
@@ -49,9 +65,7 @@ class QuotationController {
         return next({ statusCode: 404, message: "Quotation not found" });
       }
 
-      res
-        .status(200)
-        .json({ data, message: "Quotation found!", count: data.length });
+      res.status(200).json({ data, message: "Quotation found!", count });
     } catch (error) {
       next(error);
     }
@@ -59,7 +73,23 @@ class QuotationController {
 
   async getQuotationByVendor(req, res, next) {
     try {
+      // ? pagination
+      const page = req.query.page;
+      const limit = parseInt(req.query.limit) || 15;
+      const skipCount = page > 0 ? (page - 1) * limit : 0;
+
+      // ? sorting
+      const sortField = req.query.sort_by || "created_at";
+      const orderBy = req.query.order_by || "desc";
+
       let data = await Quotation.find({
+        quotation_vendor_id: req.vendor.user,
+      })
+        .sort({ [sortField]: orderBy })
+        .limit(limit)
+        .skip(skipCount);
+
+      let count = await Quotation.count({
         quotation_vendor_id: req.vendor.user,
       });
 
@@ -67,9 +97,7 @@ class QuotationController {
         return next({ statusCode: 404, message: "Quotation not found" });
       }
 
-      res
-        .status(200)
-        .json({ data, message: "Quotation found!", count: data.length });
+      res.status(200).json({ data, message: "Quotation found!", count });
     } catch (error) {
       next(error);
     }
@@ -79,7 +107,7 @@ class QuotationController {
     try {
       let data = await Quotation.findOne({
         _id: req.params.id,
-      });
+      }).populate("quotation_request_id");
 
       if (!data) {
         return next({ statusCode: 404, message: "Quotation not found" });
