@@ -93,11 +93,11 @@ passport.use(
 exports.user = (req, res, next) => {
   passport.authorize("user", { session: false }, (err, user, info) => {
     if (err) {
-      return next({ message: "you can not access", statusCode: 403 });
+      return next({ message: "User not logged in", statusCode: 403 });
     }
 
     if (!user) {
-      return next({ message: "you can not access", statusCode: 403 });
+      return next({ message: "User not logged in", statusCode: 403 });
     }
 
     req.user = user;

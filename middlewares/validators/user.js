@@ -3,7 +3,7 @@ const { promisify } = require("util");
 const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 
-exports.user_validator = async (req, res, next) => {
+exports.user_validator = async (req, res, next, err) => {
   try {
     const error_messages = [];
 
@@ -68,9 +68,14 @@ exports.user_validator = async (req, res, next) => {
       req.body.user_avatar = req.file.path;
     }
 
+    res.status(err.statusCode || 500).json({
+      errors: err.message || [err.message],
+    });
+
     if (error_messages.length > 0) {
       return next({ statusCode: 400, messages: error_messages });
     }
+
     next();
   } catch (error) {
     next(error);
