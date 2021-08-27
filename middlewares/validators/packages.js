@@ -67,6 +67,12 @@ exports.packageValidator = async (req, res, next) => {
       req.body.package_max_capacity = array[1];
     }
 
+    // set package_type as the same one with
+    // the vendor creating the package
+    const currentVendor = await vendor.findOne({ _id: req.vendor.user });
+    req.body.package_vendor_id = currentVendor._id;
+    req.body.package_type = currentVendor.vendor_type;
+
     // check for package_services validity
     if (req.body.package_services && req.body.package_services.length > 0) {
       // if package_services is not an array, make it an array
@@ -98,7 +104,7 @@ exports.packageValidator = async (req, res, next) => {
       );
     }
 
-    if (req.files.length > 0) {
+    if (req.files?.length > 0) {
       req.body.package_album = [];
       req.files.forEach((photo) => {
         if (!photo.mimetype.startsWith("image") || photo.size > 2000000) {
@@ -108,11 +114,10 @@ exports.packageValidator = async (req, res, next) => {
         }
       });
     }
-
     if (req.body.package_status) {
       if (
-        req.body.package_status !== "draft" ||
-        req.body.package_status !== "published" ||
+        req.body.package_status !== "draft" &&
+        req.body.package_status !== "published" &&
         req.body.package_status !== "archived"
       ) {
         errorMessages.push(
@@ -120,12 +125,6 @@ exports.packageValidator = async (req, res, next) => {
         );
       }
     }
-
-    // set package_type as the same one with
-    // the vendor creating the package
-    const currentVendor = await vendor.findOne({ _id: req.vendor.user });
-    req.body.package_vendor_id = currentVendor._id;
-    req.body.package_type = currentVendor.vendor_type;
 
     if (errorMessages.length > 0) {
       return next({ statusCode: 400, messages: errorMessages });
