@@ -46,11 +46,17 @@ const vendorSchema = new mongoose.Schema(
     vendor_location: {
       type: String,
     },
-    vendor_capacity: {
-      type: String,
+    vendor_min_capacity: {
+      type: Number,
     },
-    vendor_price_range: {
-      type: String,
+    vendor_max_capacity: {
+      type: Number,
+    },
+    vendor_min_price: {
+      type: Number,
+    },
+    vendor_max_price: {
+      type: Number,
     },
     vendor_type: {
       type: String,

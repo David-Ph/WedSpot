@@ -23,7 +23,7 @@ const {
   getVendorById,
   updateVendor,
   deleteVendor,
-  getVendorsByPage,
+  getVendorsByType,
 } = require("../controllers/vendors");
 
 // Import controller from auth
@@ -39,7 +39,6 @@ router.post("/register", registerValidator, register, getToken);
 router.post("/login", logInValidator, login, getToken);
 router.get("/", queryVendorValidator, getVendors);
 router.get("/getMe", vendor, getMe);
-router.get("/:id", getVendorById);
 router.put(
   "/edit",
   upload.fields([
@@ -54,6 +53,7 @@ router.put(
   vendor,
   updateVendor
 );
+router.get("/:id", getVendorById);
 
 // router.delete("/getMe", vendorValidator, deleteVendor, getMe);
 

@@ -1,4 +1,5 @@
 const { vendor } = require("../models");
+const request = require("../models/request");
 
 class Vendors {
   async getVedorsCount(req, res, next) {
@@ -13,56 +14,46 @@ class Vendors {
 
   async getVendors(req, res, next) {
     try {
+      // ? price and capacity filtering
+      const minCapacity = parseInt(req.query.vendor_min_capacity) || 0;
+      const maxCapacity = parseInt(req.query.vendor_max_capacity) || 10000;
+      const minPrice = parseInt(req.query.vendor_min_price) || 0;
+      const maxPrice = parseInt(req.query.vendor_max_price) || 3000000000;
+
+      let search = {
+        vendor_min_capacity: { $lte: maxCapacity },
+        vendor_max_capacity: { $gte: minCapacity },
+        vendor_min_price: { $lte: maxPrice },
+        vendor_max_price: { $gte: minPrice },
+      };
+      if (req.query.vendor_type) {
+        search.vendor_type = req.query.vendor_type;
+      }
+      if (req.query.vendor_location) {
+        search.vendor_location = req.query.vendor_location;
+      }
+
       // ? pagination
-      const { page = 1, limit = 10 } = req.query;
+      const page = req.query.page;
+      const limit = parseInt(req.query.limit) || 15;
+      const skipCount = page > 0 ? (page - 1) * limit : 0;
+
+      // ? sorting
+      const sortField = req.query.sort_by || "created_at";
+      const orderBy = req.query.order_by || "desc";
+
       let data = await vendor
-        .find()
-        .limit(limit * 1)
-        .skip((page - 1) * limit);
+        .find(search)
+        .sort({ [sortField]: orderBy })
+        .limit(limit)
+        .skip(skipCount);
 
-      // // ? price and capacity filtering
-      // const minCapacity = parseInt(req.query.min_capacity) || 0;
-      // const maxCapacity = parseInt(req.query.max_capacity) || 10000;
-      // const minPrice = parseInt(req.query.min_price) || 0;
-      // const maxPrice = parseInt(req.query.max_price) || 3000000000;
-
-      // // ? type and location filtering
-      // const subQuery = {
-      //   package_price: { $gte: minPrice, $lte: maxPrice },
-      // };
-
-      // if (req.queryPolluted?.type) req.query.type = req.queryPolluted.type;
-      // if (req.query.type) subQuery.vendor_type = req.query.type;
-
-      // if (req.queryPolluted?.location)
-      //   req.query.location = req.queryPolluted.location;
-      // if (req.query.location) subQuery.vendor_location = req.query.location;
-
-      // // if(req.user) subQuery.package_status = 'published';
-      // // ? search tags
-      // if (req.query.search)
-      //   subQuery.vendor_types = new RegExp(req.query.search, "i");
-
-      // // ? sorting
-      // const sortField = req.query.sort_by || "created_at";
-      // const orderBy = req.query.order_by || "desc";
-
-      //   .sort({ [sortField]: orderBy })
-      //   .limit(limit)
-      //   .skip(skipCount);
-
-      // let count = await vendor.count(subQuery);
-
-      // // filter based on capacity
-      // data = data.filter((ven) => {
-      //   return filterVendorCapacity(ven, minCapacity, maxCapacity);
-      // });
+      let count = await vendor.count(search);
 
       if (data.length === 0) {
         return next({ message: "Vendors not found", statusCode: 404 });
       }
-
-      res.status(200).json({ data });
+      res.status(200).json({ data, count });
     } catch (error) {
       next(error);
     }

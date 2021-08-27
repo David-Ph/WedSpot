@@ -48,10 +48,6 @@ exports.vendorValidator = async (req, res, next) => {
     /* Validate the user input */
     const errorMessages = [];
 
-    // if (req.body.vendor_name && !validator.isEmpty(req.body.vendor_name)) {
-    //   errorMessages.push("Vendor's name should not be empty");
-    // }
-
     if (
       req.body.vendor_email_info &&
       !validator.isEmail(req.body.vendor_email_info)
@@ -113,8 +109,9 @@ exports.vendorValidator = async (req, res, next) => {
           "Invalid price range format. Example: '25000000-75000000'"
         );
       }
+      req.body.vendor_min_price = array[0];
+      req.body.vendor_max_price = array[1];
     }
-
     // check if package_capacity is valid format
     if (req.body.vendor_capacity) {
       const array = req.body.vendor_capacity.split("-");
@@ -122,6 +119,8 @@ exports.vendorValidator = async (req, res, next) => {
       if (array.length !== 2 || isNaN(array[0]) || isNaN(array[1])) {
         errorMessages.push("Invalid vendor_capacity format. Example: '50-250'");
       }
+      req.body.vendor_min_capacity = array[0];
+      req.body.vendor_max_capacity = array[1];
     }
 
     // if (req.body.vendor_types) {
