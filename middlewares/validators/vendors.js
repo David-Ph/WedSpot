@@ -123,6 +123,10 @@ exports.vendorValidator = async (req, res, next) => {
       req.body.vendor_max_capacity = array[1];
     }
 
+    if (!validator.isInt(req.body.vendor_rating, { min: 3, max: 5 })) {
+      errorMessages.push("rating cannot be empty, less than 3 or more than 5");
+    }
+
     // if (req.body.vendor_types) {
     //   if (!validator.isValid(req.body.vendor_types)) {
     //     errorMessages.push("Vendor type is not valid");

@@ -66,6 +66,11 @@ const vendorSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    vendor_rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+    },
   },
 
   {
