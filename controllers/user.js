@@ -7,7 +7,7 @@ class UserController {
         { _id: req.user.user },
         req.body,
         { new: true }
-      ).select("-password");
+      ).select("-user_password");
 
       if (!new_data) {
         return next({ statusCode: 404, message: "User is not found" });
