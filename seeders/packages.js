@@ -14,7 +14,7 @@ async function addPackages() {
   const vendors = await vendor.find();
 
   for (let vendorIndex = 0; vendorIndex < vendors.length; vendorIndex++) {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 6; i++) {
       let services;
       if (vendors[vendorIndex].vendor_type === "venue") {
         services = venueServices;

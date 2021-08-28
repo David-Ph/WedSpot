@@ -10,7 +10,7 @@ const { vendor } = require("../models");
 
 // seeder add
 async function addVendors() {
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 5; i++) {
     const randomIndex = Math.floor(Math.random() * sampleCapacity.length);
 
     const newVendor = await vendor.create({
@@ -37,7 +37,7 @@ async function addVendors() {
       vendor_rating: Math.floor(Math.random() * (5 - 3) + 3),
     });
   }
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 5; i++) {
     const randomIndex = Math.floor(Math.random() * sampleCapacity.length);
 
     const newVendor = await vendor.create({
