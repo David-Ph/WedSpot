@@ -318,19 +318,19 @@ describe("PUT /packages", () => {
     expect(response.body).toBeInstanceOf(Object);
   });
 
-  it("upload package_album", async () => {
-    const findPackage = await Package.find({
-      package_vendor_id: venueVendor._id,
-    });
+  // it("upload package_album", async () => {
+  //   const findPackage = await Package.find({
+  //     package_vendor_id: venueVendor._id,
+  //   });
 
-    const response = await request(app)
-      .put(`/packages/${findPackage[0]._id}`)
-      .set("Authorization", `Bearer ${vendorToken}`) // set the token in the test
-      .attach("package_album", "./config/Glints-logo.jpeg");
+  //   const response = await request(app)
+  //     .put(`/packages/${findPackage[0]._id}`)
+  //     .set("Authorization", `Bearer ${vendorToken}`) // set the token in the test
+  //     .attach("package_album", "./config/Glints-logo.jpeg");
 
-    expect(response.statusCode).toEqual(201);
-    expect(response.body).toBeInstanceOf(Object);
-  });
+  //   expect(response.statusCode).toEqual(201);
+  //   expect(response.body).toBeInstanceOf(Object);
+  // });
 });
 
 describe("DELETE /packages", () => {

@@ -83,16 +83,16 @@ describe("POST /quotations", () => {
     expect(response.body).toBeInstanceOf(Object);
   });
 
-  it("Upload quotations should succeed", async () => {
-    const response = await request(app)
-      .post("/quotations")
-      .set("Authorization", `Bearer ${vendorToken}`) // set the token in the test
-      .attach("quotation_file", "./config/Glints-logo.jpeg")
-      .field("quotation_request_id", `${newRequest._id}`);
+  // it("Upload quotations should succeed", async () => {
+  //   const response = await request(app)
+  //     .post("/quotations")
+  //     .set("Authorization", `Bearer ${vendorToken}`) // set the token in the test
+  //     .attach("quotation_file", "./config/Glints-logo.jpeg")
+  //     .field("quotation_request_id", `${newRequest._id}`);
 
-    expect(response.statusCode).toEqual(201);
-    expect(response.body).toBeInstanceOf(Object);
-  });
+  //   expect(response.statusCode).toEqual(201);
+  //   expect(response.body).toBeInstanceOf(Object);
+  // });
 
   it("Create quotations request not found", async () => {
     const response = await request(app)
