@@ -37,12 +37,12 @@ async function addPackages() {
         package_min_capacity: sampleCapacity[randomIndex].min,
         package_max_capacity: sampleCapacity[randomIndex].max,
         package_album: [
-          packageAlbums[Math.floor(Math.random * packageAlbums.length)],
-          packageAlbums[Math.floor(Math.random * packageAlbums.length)],
-          packageAlbums[Math.floor(Math.random * packageAlbums.length)],
-          packageAlbums[Math.floor(Math.random * packageAlbums.length)],
-          packageAlbums[Math.floor(Math.random * packageAlbums.length)],
-          packageAlbums[Math.floor(Math.random * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
         ],
       });
     }
