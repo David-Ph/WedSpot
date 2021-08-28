@@ -1,7 +1,11 @@
 const { add_users, delete_users } = require("./user");
+const { addPackages, deletePackages } = require("./packages");
+const { addVendors, deleteVendors } = require("./vendors");
 
 async function add() {
   await add_users();
+  await addVendors();
+  await addPackages();
 }
 
 async function remove() {

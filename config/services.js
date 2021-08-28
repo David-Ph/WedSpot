@@ -25,14 +25,14 @@ const samplePrices = [
 ];
 
 const samplePriceRanges = [
-  "25000000-50000000",
-  "35000000-75000000",
-  "50000000-100000000",
-  "75000000-125000000",
-  "10000000-80000000",
-  "50000000-1500000000",
-  "15000000-300000000",
-  "20000000-50000000",
+  { min: 25000000, max: 50000000 },
+  { min: 35000000, max: 75000000 },
+  { min: 50000000, max: 100000000 },
+  { min: 75000000, max: 125000000 },
+  { min: 10000000, max: 80000000 },
+  { min: 50000000, max: 1500000000 },
+  { min: 15000000, max: 300000000 },
+  { min: 20000000, max: 50000000 },
 ];
 
 const sampleCapacity = [
@@ -46,17 +46,6 @@ const sampleCapacity = [
   { min: 1000, max: 2500 },
 ];
 
-const sampleCapacityRanges = [
-  "50-250",
-  "500-1500",
-  "250-500",
-  "500-750",
-  "500-2500",
-  "1500-3000",
-  "0-500",
-  "1000-2500",
-];
-
 module.exports = {
   venueServices,
   organizerServices,
@@ -64,5 +53,4 @@ module.exports = {
   samplePrices,
   sampleCapacity,
   samplePriceRanges,
-  sampleCapacityRanges,
 };

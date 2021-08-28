@@ -55,7 +55,8 @@ class PackageController {
       let data = await Package.find(subQuery)
         .sort({ [sortField]: orderBy })
         .limit(limit)
-        .skip(skipCount);
+        .skip(skipCount)
+        .populate("package_vendor_id", "-vendor_password -__v");
 
       let count = await Package.count(subQuery);
 
@@ -73,7 +74,7 @@ class PackageController {
     try {
       let data = await Package.findOne({
         _id: req.params.id,
-      }).populate("package_vendor_id");
+      }).populate("package_vendor_id", "-vendor_password -__v");
 
       if (!data) {
         return next({ statusCode: 404, message: "Package not found" });
