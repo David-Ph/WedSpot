@@ -3,6 +3,8 @@ const {
   locations,
   sampleCapacity,
   samplePriceRanges,
+  vendorAvatars,
+  vendorHeaders,
 } = require("../config/services");
 const { vendor } = require("../models");
 
@@ -17,8 +19,10 @@ async function addVendors() {
       vendor_password: "Oke12345!",
       vendor_type: "venue",
       vendor_email_info: faker.internet.email(),
-      vendor_avatar: faker.image.avatar(),
-      vendor_header: faker.image.nature(),
+      vendor_avatar:
+        vendorAvatars[Math.floor(Math.random() * vendorAvatars.length)],
+      vendor_header:
+        vendorHeaders[Math.floor(Math.random() * vendorHeaders.length)],
       vendor_phone: faker.phone.phoneNumber(),
       vendor_website: faker.internet.url(),
       vendor_instagram: faker.internet.url(),
