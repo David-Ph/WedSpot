@@ -18,13 +18,24 @@ const QuotationController = require("../controllers/quotations");
 const {
   createQuotationValidator,
   updateRequestValidator,
+  queryQuotationValidator,
 } = require("../middlewares/validators/quotations");
 
 // ? set routers
 // //////////////
 // router.get('/', QuotationController.getQuotations);
-router.get("/user", user, QuotationController.getQuotationByUser);
-router.get("/vendor", vendor, QuotationController.getQuotationByVendor);
+router.get(
+  "/user",
+  user,
+  queryQuotationValidator,
+  QuotationController.getQuotationByUser
+);
+router.get(
+  "/vendor",
+  vendor,
+  queryQuotationValidator,
+  QuotationController.getQuotationByVendor
+);
 router.get("/:id", QuotationController.getQuotationById);
 router.post(
   "/",
@@ -39,7 +50,7 @@ router.put(
   updateRequestValidator,
   QuotationController.updateQuotationStatus
 );
-router.delete("/:id", QuotationController.deleteQuotation);
+// router.delete("/:id", QuotationController.deleteQuotation);
 
 // ? export router
 //////////////////
