@@ -1,43 +1,33 @@
 const { Request } = require("../models");
 
 class RequestController {
-  async getRequestCount(req, res, next) {
-    try {
-      const requestCount = await Request.count();
+  // async getRequests(req, res, next) {
+  //   try {
+  //     // ? pagination
+  //     const page = req.query.page;
+  //     const limit = parseInt(req.query.limit) || 15;
+  //     const skipCount = page > 0 ? (page - 1) * limit : 0;
 
-      res.status(200).json({ data: requestCount });
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     // ? sorting
+  //     const sortField = req.query.sort_by || "created_at";
+  //     const orderBy = req.query.order_by || "desc";
 
-  async getRequests(req, res, next) {
-    try {
-      // ? pagination
-      const page = req.query.page;
-      const limit = parseInt(req.query.limit) || 15;
-      const skipCount = page > 0 ? (page - 1) * limit : 0;
+  //     let data = await Request.find()
+  //       .sort({ [sortField]: orderBy })
+  //       .limit(limit)
+  //       .skip(skipCount);
 
-      // ? sorting
-      const sortField = req.query.sort_by || "created_at";
-      const orderBy = req.query.order_by || "desc";
+  //     let count = await Request.count();
 
-      let data = await Request.find()
-        .sort({ [sortField]: orderBy })
-        .limit(limit)
-        .skip(skipCount);
+  //     if (data.length === 0) {
+  //       return next({ message: "Request not found", statusCode: 404 });
+  //     }
 
-      let count = await Request.count();
-
-      if (data.length === 0) {
-        return next({ message: "Request not found", statusCode: 404 });
-      }
-
-      res.status(200).json({ data, count, count: data.length });
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     res.status(200).json({ data, count, count: data.length });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
   async getRequestsByUser(req, res, next) {
     try {
@@ -138,40 +128,40 @@ class RequestController {
     }
   }
 
-  async updateRequestStatus(req, res, next) {
-    try {
-      const newData = await Request.findOneAndUpdate(
-        { _id: req.params.id },
-        { request_status: req.body.request_status },
-        { new: true }
-      );
+  // async updateRequestStatus(req, res, next) {
+  //   try {
+  //     const newData = await Request.findOneAndUpdate(
+  //       { _id: req.params.id },
+  //       { request_status: req.body.request_status },
+  //       { new: true }
+  //     );
 
-      if (!newData) {
-        return next({ statusCode: 404, message: "Request not found" });
-      }
+  //     if (!newData) {
+  //       return next({ statusCode: 404, message: "Request not found" });
+  //     }
 
-      res
-        .status(201)
-        .json({ newData, message: "Request successfully updated!" });
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     res
+  //       .status(201)
+  //       .json({ newData, message: "Request successfully updated!" });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
-  async deleteRequest(req, res, next) {
-    try {
-      //   for soft delete
-      const data = await Request.deleteById(req.params.id);
+  // async deleteRequest(req, res, next) {
+  //   try {
+  //     //   for soft delete
+  //     const data = await Request.deleteById(req.params.id);
 
-      if (data.nModified === 0) {
-        return next({ statusCode: 404, message: "Request not found" });
-      }
+  //     if (data.nModified === 0) {
+  //       return next({ statusCode: 404, message: "Request not found" });
+  //     }
 
-      res.status(200).json({ message: "Request successfully deleted" });
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     res.status(200).json({ message: "Request successfully deleted" });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 }
 
 module.exports = new RequestController();

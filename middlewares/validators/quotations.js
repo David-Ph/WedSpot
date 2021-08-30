@@ -1,18 +1,7 @@
 const { Package, vendor, User, Request, Quotation } = require("../../models");
 const validator = require("validator");
-const {
-  locations,
-  venueServices,
-  organizerServices,
-} = require("../../config/services");
-const { promisify } = require("util");
 
-function hasDuplicates(array) {
-  // will return true if there's a duplicate element in an array
-  return new Set(array).size !== array.length;
-}
-
-exports.queryRequestValidator = async (req, res, next) => {
+exports.queryQuotationValidator = async (req, res, next) => {
   try {
     const errorMessages = [];
 
