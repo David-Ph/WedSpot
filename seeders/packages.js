@@ -5,6 +5,7 @@ const {
   locations,
   samplePrices,
   sampleCapacity,
+  packageAlbums,
 } = require("../config/services");
 const { Package, vendor } = require("../models"); // TODO should add vendor later
 
@@ -13,7 +14,7 @@ async function addPackages() {
   const vendors = await vendor.find();
 
   for (let vendorIndex = 0; vendorIndex < vendors.length; vendorIndex++) {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 6; i++) {
       let services;
       if (vendors[vendorIndex].vendor_type === "venue") {
         services = venueServices;
@@ -36,9 +37,12 @@ async function addPackages() {
         package_min_capacity: sampleCapacity[randomIndex].min,
         package_max_capacity: sampleCapacity[randomIndex].max,
         package_album: [
-          faker.image.nature(),
-          faker.image.nature(),
-          faker.image.nature(),
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
+          packageAlbums[Math.floor(Math.random() * packageAlbums.length)],
         ],
       });
     }

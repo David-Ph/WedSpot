@@ -16,6 +16,8 @@ const userSchema = new mongoose.Schema(
     },
     user_fullname: {
       type: String,
+      required: true,
+      length: 3,
     },
     user_birthday: {
       type: String,

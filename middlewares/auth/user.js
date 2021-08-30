@@ -9,11 +9,11 @@ const { User } = require("../../models"); // Import user
 exports.register = (req, res, next) => {
   passport.authenticate("signup", { session: false }, (err, user, info) => {
     if (err) {
-      return next({ message: err.message, statusCode: 401 });
+      return next({ message: "Email has been used", statusCode: 401 });
     }
 
     if (!user) {
-      return next({ message: info.message, statusCode: 401 });
+      return next({ message: "Email has been used", statusCode: 401 });
     }
 
     req.user = user;
@@ -93,11 +93,11 @@ passport.use(
 exports.user = (req, res, next) => {
   passport.authorize("user", { session: false }, (err, user, info) => {
     if (err) {
-      return next({ message: err.message, statusCode: 403 });
+      return next({ message: "you can not access", statusCode: 403 });
     }
 
     if (!user) {
-      return next({ message: info.message, statusCode: 403 });
+      return next({ message: "you can not access", statusCode: 403 });
     }
 
     req.user = user;

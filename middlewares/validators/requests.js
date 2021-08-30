@@ -1,16 +1,6 @@
 const { Package, vendor, User, Request } = require("../../models");
 const validator = require("validator");
-const {
-  locations,
-  venueServices,
-  organizerServices,
-} = require("../../config/services");
 const { promisify } = require("util");
-
-function hasDuplicates(array) {
-  // will return true if there's a duplicate element in an array
-  return new Set(array).size !== array.length;
-}
 
 exports.queryRequestValidator = async (req, res, next) => {
   try {
@@ -64,7 +54,7 @@ exports.createRequestValidator = async (req, res, next) => {
       _id: req.body.request_package_id,
     });
     req.body.request_package_id = getPackage;
-    req.body.request_vendor_id = getPackage.package_vendor_id;
+    req.body.request_vendor_id = getPackage?.package_vendor_id;
 
     if (!getPackage) {
       errorMessages.push("Package not found!");
@@ -80,26 +70,26 @@ exports.createRequestValidator = async (req, res, next) => {
   }
 };
 
-exports.updateRequestValidator = async (req, res, next) => {
-  try {
-    const errorMessages = [];
+// exports.updateRequestValidator = async (req, res, next) => {
+//   try {
+//     const errorMessages = [];
 
-    const getRequest = await Request.findOne({ _id: req.params.id });
+//     const getRequest = await Request.findOne({ _id: req.params.id });
 
-    if (!getRequest) {
-      return next({ statusCode: 404, messages: "Request not found" });
-    }
+//     if (!getRequest) {
+//       return next({ statusCode: 404, messages: "Request not found" });
+//     }
 
-    if (req.vendor.user != getRequest.request_vendor_id) {
-      return next({ statusCode: 401, messages: "Forbidden acccess" });
-    }
+//     if (req.vendor.user != getRequest.request_vendor_id) {
+//       return next({ statusCode: 401, messages: "Forbidden acccess" });
+//     }
 
-    if (errorMessages.length > 0) {
-      return next({ statusCode: 400, messages: errorMessages });
-    }
+//     if (errorMessages.length > 0) {
+//       return next({ statusCode: 400, messages: errorMessages });
+//     }
 
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// };

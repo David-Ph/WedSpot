@@ -1,43 +1,33 @@
 const { Quotation } = require("../models");
 
 class QuotationController {
-  async getQuotationCount(req, res, next) {
-    try {
-      const quotationCount = await Quotation.count();
+  // async getQuotations(req, res, next) {
+  //   try {
+  //     // ? pagination
+  //     const page = req.query.page;
+  //     const limit = parseInt(req.query.limit) || 15;
+  //     const skipCount = page > 0 ? (page - 1) * limit : 0;
 
-      res.status(200).json({ data: quotationCount });
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     // ? sorting
+  //     const sortField = req.query.sort_by || "created_at";
+  //     const orderBy = req.query.order_by || "desc";
 
-  async getQuotations(req, res, next) {
-    try {
-      // ? pagination
-      const page = req.query.page;
-      const limit = parseInt(req.query.limit) || 15;
-      const skipCount = page > 0 ? (page - 1) * limit : 0;
+  //     let data = await Quotation.find()
+  //       .sort({ [sortField]: orderBy })
+  //       .limit(limit)
+  //       .skip(skipCount);
 
-      // ? sorting
-      const sortField = req.query.sort_by || "created_at";
-      const orderBy = req.query.order_by || "desc";
+  //     let count = await Quotation.count();
 
-      let data = await Quotation.find()
-        .sort({ [sortField]: orderBy })
-        .limit(limit)
-        .skip(skipCount);
+  //     if (data.length === 0) {
+  //       return next({ message: "Quotation not found", statusCode: 404 });
+  //     }
 
-      let count = await Quotation.count();
-
-      if (data.length === 0) {
-        return next({ message: "Quotation not found", statusCode: 404 });
-      }
-
-      res.status(200).json({ data, count, count: data.length });
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     res.status(200).json({ data, count, count: data.length });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
   async getQuotationByUser(req, res, next) {
     try {
@@ -155,20 +145,20 @@ class QuotationController {
     }
   }
 
-  async deleteQuotation(req, res, next) {
-    try {
-      //   for soft delete
-      const data = await Quotation.deleteById(req.params.id);
+  // async deleteQuotation(req, res, next) {
+  //   try {
+  //     //   for soft delete
+  //     const data = await Quotation.deleteById(req.params.id);
 
-      if (data.nModified === 0) {
-        return next({ statusCode: 404, message: "Quotation not found" });
-      }
+  //     if (data.nModified === 0) {
+  //       return next({ statusCode: 404, message: "Quotation not found" });
+  //     }
 
-      res.status(200).json({ message: "Quotation successfully deleted" });
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     res.status(200).json({ message: "Quotation successfully deleted" });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 }
 
 module.exports = new QuotationController();
