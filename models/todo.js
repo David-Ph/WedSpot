@@ -15,6 +15,9 @@ const todoSchema = new mongoose.Schema(
     todo_due_date: {
       type: Date,
     },
+    todo_notes: {
+      type: String,
+    },
     todo_is_done: {
       type: Boolean,
       default: false,
