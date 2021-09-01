@@ -62,6 +62,7 @@ const requestRouter = require("./routes/requests");
 const user_router = require("./routes/user");
 const quotationsRouter = require("./routes/quotations");
 const configRouter = require("./routes/config");
+const todoRouter = require("./routes/todos");
 
 // ? import error handler
 // //////////////////////
@@ -79,6 +80,7 @@ app.use(hpp());
 // ? set routes
 // /////////////
 // app.use("/vendors", auth);
+app.use("/todos", todoRouter);
 app.use("/vendors", vendors);
 app.use("/quotations", quotationsRouter);
 app.use("/packages", packageRouter);
