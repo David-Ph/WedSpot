@@ -127,11 +127,6 @@ exports.vendorValidator = async (req, res, next) => {
       errorMessages.push("rating cannot be empty, less than 3 or more than 5");
     }
 
-    // if (req.body.vendor_types) {
-    //   if (!validator.isValid(req.body.vendor_types)) {
-    //     errorMessages.push("Vendor type is not valid");
-    //   }
-    // }
     //checking limited photo size
     if (req.files) {
       if (req.files.vendor_avatar) {
