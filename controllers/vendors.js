@@ -35,8 +35,8 @@ class Vendors {
       if (req.query.location) search.vendor_location = req.query.location;
 
       // ? search tags
-      if (req.query.searching)
-        search.vendor_name = new RegExp(req.query.searching, "i");
+      if (req.query.search)
+        search.vendor_name = new RegExp(req.query.search, "i");
 
       // ? pagination
       const page = req.query.page;
