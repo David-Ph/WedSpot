@@ -73,8 +73,6 @@ class TodoController {
         return next({ statusCode: 404, message: "Todo not found!" });
       }
 
-      console.log(data);
-
       res.status(200).json({ message: "Successfully deleted" });
     } catch (error) {
       next(error);
