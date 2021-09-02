@@ -15,23 +15,28 @@ class Vendors {
   async getVendors(req, res, next) {
     try {
       // ? price and capacity filtering
-      const minCapacity = parseInt(req.query.vendor_min_capacity) || 0;
-      const maxCapacity = parseInt(req.query.vendor_max_capacity) || 10000;
-      const minPrice = parseInt(req.query.vendor_min_price) || 0;
-      const maxPrice = parseInt(req.query.vendor_max_price) || 3000000000;
+      const minCapacity = parseInt(req.query.min_capacity) || 0;
+      const maxCapacity = parseInt(req.query.max_capacity) || 10000;
+      const minPrice = parseInt(req.query.min_price) || 0;
+      const maxPrice = parseInt(req.query.max_price) || 3000000000;
 
-      let search = {
+      const search = {
         vendor_min_capacity: { $lte: maxCapacity },
         vendor_max_capacity: { $gte: minCapacity },
         vendor_min_price: { $lte: maxPrice },
         vendor_max_price: { $gte: minPrice },
       };
-      if (req.query.vendor_type) {
-        search.vendor_type = req.query.vendor_type;
-      }
-      if (req.query.vendor_location) {
-        search.vendor_location = req.query.vendor_location;
-      }
+
+      if (req.queryPolluted?.type) req.query.type = req.queryPolluted.type;
+      if (req.query.type) search.vendor_type = req.query.type;
+
+      if (req.queryPolluted?.location)
+        req.query.location = req.queryPolluted.location;
+      if (req.query.location) search.vendor_location = req.query.location;
+
+      // ? search tags
+      if (req.query.search)
+        search.vendor_name = new RegExp(req.query.search, "i");
 
       // ? pagination
       const page = req.query.page;
