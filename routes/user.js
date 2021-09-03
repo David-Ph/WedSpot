@@ -8,7 +8,11 @@ const passport = require("passport");
 const { register, login } = require("../middlewares/auth/user");
 
 // admin or user validator
-const { user } = require("../middlewares/auth/user");
+const {
+  user,
+  googleRedirect,
+  googleSignIn,
+} = require("../middlewares/auth/user");
 const { user_validator } = require("../middlewares/validators/user");
 
 // import validator
@@ -35,15 +39,10 @@ router.put(
   user_validator,
   update_user
 );
-router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email", "openid"] })
-);
-
-router.get(
-  "/auth/google/redirect",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  get_token
+router.get("/auth/google", googleSignIn);
+router.get("/auth/google/redirect", googleRedirect, get_token);
+router.get("/failed", (req, res) =>
+  res.status(401).json({ message: "Login failed" })
 );
 
 // exports

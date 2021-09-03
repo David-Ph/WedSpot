@@ -134,7 +134,15 @@ passport.use(
   )
 );
 
-// exports.googleSignIn =
+exports.googleSignIn = passport.authenticate("google", {
+  session: false,
+  scope: ["profile", "email", "openid"],
+});
+
+exports.googleRedirect = passport.authenticate("google", {
+  session: false,
+  failureRedirect: "/user/failed",
+});
 
 passport.use(
   new GoogleStrategy(
@@ -148,7 +156,7 @@ passport.use(
         let findUser = await User.findOne({ user_email: profile._json.email });
 
         if (!findUser) {
-          newUser = await User.create({
+          findUser = await User.create({
             user_fullname: profile._json.name,
             user_email: profile._json.email,
             user_avatar: profile._json.picture,

@@ -18,7 +18,7 @@ const passport = require("passport");
 
 // initialize passport
 // ///////////////////
-app.use(passport.initialize());
+// app.use(passport.initialize());
 // CORS
 app.use(cors());
 
