@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt"); // to compare the password
 const JWTstrategy = require("passport-jwt").Strategy; // to enable jwt in passport
 const ExtractJWT = require("passport-jwt").ExtractJwt; // to extract or read jwt
 const { vendor } = require("../../models"); // Import vendor
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // Logic to register
 exports.register = (req, res, next) => {
@@ -249,6 +250,53 @@ passport.use(
         return done(null, false, { message: "Forbidden access" });
       } catch (error) {
         return done(error, false, { message: "Forbidden access" });
+      }
+    }
+  )
+);
+
+exports.googleSignIn = passport.authenticate("vendorOAuth", {
+  session: false,
+  scope: ["profile", "email", "openid"],
+});
+
+exports.googleRedirect = passport.authenticate("vendorOAuth", {
+  session: false,
+  failureRedirect: "/vendors/failed",
+});
+
+exports.addVendorRedirect = (req, res, next) => {
+  try {
+    req.vendor = req.user;
+    next();
+  } catch (error) {
+    return next(error);
+  }
+};
+
+passport.use(
+  "vendorOAuth",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_REDIRECT_URI_VENDOR,
+    },
+    async function (accessToken, refreshToken, profile, cb) {
+      try {
+        let findVendor = await vendor.findOne({
+          vendor_email: profile._json.email,
+        });
+        if (!findVendor) {
+          findVendor = await vendor.create({
+            vendor_name: profile._json.name,
+            vendor_email: profile._json.email,
+          });
+        }
+
+        return cb(null, findVendor);
+      } catch (error) {
+        return cb(error, false, { message: "Forbidden access" });
       }
     }
   )

@@ -10,7 +10,6 @@ const vendorSchema = new mongoose.Schema(
     },
     vendor_password: {
       type: String,
-      required: true,
       set: setPassword,
     },
     vendor_name: {
