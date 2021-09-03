@@ -2,12 +2,17 @@ const express = require("express");
 const multer = require("multer");
 const { storage } = require("../cloudinary");
 const upload = multer({ storage: storage });
+const passport = require("passport");
 
 // import auth
 const { register, login } = require("../middlewares/auth/user");
 
 // admin or user validator
-const { user } = require("../middlewares/auth/user");
+const {
+  user,
+  googleRedirect,
+  googleSignIn,
+} = require("../middlewares/auth/user");
 const { user_validator } = require("../middlewares/validators/user");
 
 // import validator
@@ -33,6 +38,11 @@ router.put(
   user,
   user_validator,
   update_user
+);
+router.get("/auth/google", googleSignIn);
+router.get("/auth/google/redirect", googleRedirect, get_token);
+router.get("/failed", (req, res) =>
+  res.status(401).json({ message: "Login failed" })
 );
 
 // exports
