@@ -4,6 +4,11 @@ const bcrypt = require("bcrypt"); // to compare the password
 const JWTstrategy = require("passport-jwt").Strategy; // to enable jwt in passport
 const ExtractJWT = require("passport-jwt").ExtractJwt; // to extract or read jwt
 const { User } = require("../../models"); // Import user
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
 
 // Logic to signup
 exports.register = (req, res, next) => {
@@ -128,3 +133,33 @@ passport.use(
     }
   )
 );
+
+// exports.googleSignIn =
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_REDIRECT_URI,
+    },
+    async function (accessToken, refreshToken, profile, cb) {
+      try {
+        let findUser = await User.findOne({ user_email: profile._json.email });
+
+        if (!findUser) {
+          newUser = await User.create({
+            user_fullname: profile._json.name,
+            user_email: profile._json.email,
+            user_avatar: profile._json.picture,
+          });
+        }
+
+        return cb(null, findUser);
+      } catch (error) {
+        return cb(error, false, { message: "Forbidden access" });
+      }
+    }
+  )
+);
+// http://localhost:3000/user/auth/google

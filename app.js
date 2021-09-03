@@ -14,7 +14,11 @@ const hpp = require("hpp");
 const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
+const passport = require("passport");
 
+// initialize passport
+// ///////////////////
+app.use(passport.initialize());
 // CORS
 app.use(cors());
 

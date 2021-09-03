@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const { storage } = require("../cloudinary");
 const upload = multer({ storage: storage });
+const passport = require("passport");
 
 // import auth
 const { register, login } = require("../middlewares/auth/user");
@@ -33,6 +34,16 @@ router.put(
   user,
   user_validator,
   update_user
+);
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email", "openid"] })
+);
+
+router.get(
+  "/auth/google/redirect",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  get_token
 );
 
 // exports
