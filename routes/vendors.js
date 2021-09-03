@@ -5,7 +5,14 @@ const { storage } = require("../cloudinary");
 const upload = multer({ storage: storage });
 
 // import auth
-const { register, login, vendor } = require("../middlewares/auth/vendor");
+const {
+  register,
+  login,
+  vendor,
+  googleSignIn,
+  googleRedirect,
+  addVendorRedirect,
+} = require("../middlewares/auth/vendor");
 
 // vendor validator from vendor
 const { vendorValidator } = require("../middlewares/validators/vendors");
@@ -54,6 +61,16 @@ router.put(
   updateVendor
 );
 router.get("/:id", getVendorById);
+router.get("/auth/google", googleSignIn);
+router.get(
+  "/auth/google/redirect",
+  googleRedirect,
+  addVendorRedirect,
+  getToken
+);
+router.get("/failed", (req, res) =>
+  res.status(401).json({ message: "Login failed" })
+);
 
 // router.delete("/getMe", vendorValidator, deleteVendor, getMe);
 

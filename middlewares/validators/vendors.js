@@ -123,10 +123,6 @@ exports.vendorValidator = async (req, res, next) => {
       req.body.vendor_max_capacity = array[1];
     }
 
-    if (!validator.isInt(req.body.vendor_rating, { min: 3, max: 5 })) {
-      errorMessages.push("rating cannot be empty, less than 3 or more than 5");
-    }
-
     //checking limited photo size
     if (req.files) {
       if (req.files.vendor_avatar) {
