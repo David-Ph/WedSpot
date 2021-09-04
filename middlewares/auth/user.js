@@ -134,6 +134,8 @@ passport.use(
   )
 );
 
+// * For FE OAuth
+
 exports.googleSignIn = passport.authenticate("google", {
   session: false,
   scope: ["profile", "email", "openid"],
@@ -141,7 +143,7 @@ exports.googleSignIn = passport.authenticate("google", {
 
 exports.googleRedirect = passport.authenticate("google", {
   session: false,
-  failureRedirect: "/user/failed",
+  failureRedirect: "/user/failed", // TODO sohuld be failed redirect from FE
 });
 
 passport.use(
@@ -170,4 +172,43 @@ passport.use(
     }
   )
 );
-// http://localhost:3000/user/auth/google
+
+// * For Mobile OAuth
+
+exports.googleSignInMobile = passport.authenticate("OAuthMobile", {
+  session: false,
+  scope: ["profile", "email", "openid"],
+});
+
+exports.googleRedirectMobile = passport.authenticate("OAuthMobile", {
+  session: false,
+  failureRedirect: "/user/failed", // TODO should be failed redirect from mobile
+});
+
+passport.use(
+  "OAuthMobile",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_REDIRECT_URI_MOBILE,
+    },
+    async function (accessToken, refreshToken, profile, cb) {
+      try {
+        let findUser = await User.findOne({ user_email: profile._json.email });
+
+        if (!findUser) {
+          findUser = await User.create({
+            user_fullname: profile._json.name,
+            user_email: profile._json.email,
+            user_avatar: profile._json.picture,
+          });
+        }
+
+        return cb(null, findUser);
+      } catch (error) {
+        return cb(error, false, { message: "Forbidden access" });
+      }
+    }
+  )
+);
