@@ -21,11 +21,13 @@ const vendorSchema = new mongoose.Schema(
     },
     vendor_header: {
       type: String,
-      default: null,
+      default:
+        "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=360&ixid=MnwxfDB8MXxyYW5kb218MHx8dmVudWV8fHx8fHwxNjI5MjUxNjk0&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1440",
     },
     vendor_avatar: {
       type: String,
-      default: null,
+      default:
+        "https://images.unsplash.com/photo-1522413452208-996ff3f3e740?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=360&ixid=MnwxfDB8MXxyYW5kb218MHx8dmVudWV8fHx8fHwxNjI5MjUxODM0&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1440",
     },
     vendor_phone: {
       type: String,
