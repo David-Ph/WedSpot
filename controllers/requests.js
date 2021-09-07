@@ -26,7 +26,8 @@ class RequestController {
         .populate(
           "request_vendor_id",
           "_id vendor_avatar vendor_name vendor_rating"
-        );
+        )
+        .populate("quotation");
 
       let count = await Request.count(subQuery);
 
@@ -62,10 +63,8 @@ class RequestController {
         .sort({ [sortField]: orderBy })
         .limit(limit)
         .skip(skipCount)
-        .populate(
-          "request_user_id",
-          "_id user_avatar user_fullname user_email"
-        );
+        .populate("request_user_id", "_id user_avatar user_fullname user_email")
+        .populate("quotation");
 
       let count = await Request.count(subQuery);
 
