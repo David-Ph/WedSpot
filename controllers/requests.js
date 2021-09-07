@@ -56,9 +56,7 @@ class RequestController {
           "_id vendor_avatar vendor_name vendor_rating"
         );
 
-      let count = await Request.count({
-        request_user_id: req.user.user,
-      });
+      let count = await Request.count(subQuery);
 
       if (data.length === 0) {
         return next({ statusCode: 404, message: "Request not found" });
