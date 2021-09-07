@@ -3,11 +3,11 @@ const faker = require("faker");
 const jwt = require("jsonwebtoken");
 const app = require("../app");
 const { Package, User, vendor, Request, Quotation } = require("../models");
-let packageData = [];
 let customerToken = "";
 let vendorToken = "";
-let organizerToken = "";
 let customer;
+let secondCustomer;
+let secondCustomerToken;
 let venueVendor;
 let organizerVendor;
 let newPackage;
@@ -17,6 +17,12 @@ beforeAll(async () => {
   packageData = await Package.find();
   // create user and admin
   customer = await User.create({
+    user_fullname: faker.name.findName(),
+    user_email: faker.internet.email(),
+    user_password: "Aneh123!!",
+  });
+
+  secondCustomer = await User.create({
     user_fullname: faker.name.findName(),
     user_email: faker.internet.email(),
     user_password: "Aneh123!!",
@@ -61,6 +67,11 @@ beforeAll(async () => {
 
   // create a token based off that customer or vendor
   customerToken = jwt.sign({ user: customer._id }, process.env.JWT_SECRET);
+  secondCustomerToken = jwt.sign(
+    { user: secondCustomer._id },
+    process.env.JWT_SECRET
+  );
+
   vendorToken = jwt.sign({ user: venueVendor._id }, process.env.JWT_SECRET);
   organizerToken = jwt.sign(
     { user: organizerVendor._id },
@@ -291,7 +302,7 @@ describe("PUT /quotations status for user", () => {
     const findQuotation = await Quotation.find();
     const response = await request(app)
       .put(`/quotations/${findQuotation[0]._id}`)
-      .set("Authorization", `Bearer ${customerToken}`)
+      .set("Authorization", `Bearer ${secondCustomerToken}`)
       .send({
         quotation_status: "accepted",
       });
