@@ -31,6 +31,13 @@ class RequestController {
 
   async getRequestsByUser(req, res, next) {
     try {
+      // ? filtering by status
+      let subQuery = {
+        request_user_id: req.user.user,
+      };
+
+      if (req.query.status) subQuery.request_status = req.query.status;
+
       // ? pagination
       const page = req.query.page;
       const limit = parseInt(req.query.limit) || 15;
@@ -40,12 +47,14 @@ class RequestController {
       const sortField = req.query.sort_by || "created_at";
       const orderBy = req.query.order_by || "desc";
 
-      let data = await Request.find({
-        request_user_id: req.user.user,
-      })
+      let data = await Request.find(subQuery)
         .sort({ [sortField]: orderBy })
         .limit(limit)
-        .skip(skipCount);
+        .skip(skipCount)
+        .populate(
+          "request_vendor_id",
+          "_id vendor_avatar vendor_name vendor_rating"
+        );
 
       let count = await Request.count({
         request_user_id: req.user.user,
@@ -82,7 +91,11 @@ class RequestController {
       let data = await Request.find(subQuery)
         .sort({ [sortField]: orderBy })
         .limit(limit)
-        .skip(skipCount);
+        .skip(skipCount)
+        .populate(
+          "request_user_id",
+          "_id user_avatar user_fullname user_email"
+        );
 
       let count = await Request.count(subQuery);
 
@@ -100,7 +113,16 @@ class RequestController {
     try {
       let data = await Request.findOne({
         _id: req.params.id,
-      }).populate("quotation");
+      })
+        .populate("quotation")
+        .populate(
+          "request_vendor_id",
+          "_id vendor_email vendor_avatar vendor_name vendor_rating"
+        )
+        .populate(
+          "request_user_id",
+          "_id user_avatar user_fullname user_email"
+        );
 
       if (!data) {
         return next({ statusCode: 404, message: "Request not found" });
