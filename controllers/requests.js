@@ -27,7 +27,10 @@ class RequestController {
           "request_vendor_id",
           "_id vendor_avatar vendor_name vendor_rating"
         )
-        .populate("quotation");
+        .populate(
+          "quotation",
+          "_id quotation_file quotation_status -quotation_request_id"
+        );
 
       let count = await Request.count(subQuery);
 
@@ -64,7 +67,10 @@ class RequestController {
         .limit(limit)
         .skip(skipCount)
         .populate("request_user_id", "_id user_avatar user_fullname user_email")
-        .populate("quotation");
+        .populate(
+          "quotation",
+          "_id quotation_file quotation_status -quotation_request_id"
+        );
 
       let count = await Request.count(subQuery);
 
@@ -83,7 +89,10 @@ class RequestController {
       let data = await Request.findOne({
         _id: req.params.id,
       })
-        .populate("quotation")
+        .populate(
+          "quotation",
+          "_id quotation_file quotation_status -quotation_request_id"
+        )
         .populate(
           "request_vendor_id",
           "_id vendor_email vendor_avatar vendor_name vendor_rating"

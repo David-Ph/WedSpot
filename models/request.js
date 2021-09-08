@@ -42,6 +42,11 @@ const requestSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    request_quotation_id: {
+      type: mongoose.Types.ObjectId,
+      ref: "Quotation",
+      default: null,
+    },
   },
   {
     // Enables timestamps
@@ -67,7 +72,7 @@ requestSchema.virtual("quotation", {
   ref: "Quotation",
   localField: "_id",
   foreignField: "quotation_request_id",
-  justOne: false,
+  justOne: true,
 });
 
 // Enable soft delete, it will make delete column automaticly

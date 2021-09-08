@@ -94,6 +94,20 @@ describe("POST /quotations", () => {
     expect(response.body).toBeInstanceOf(Object);
   });
 
+  it("Create duplicate quotation should fail", async () => {
+    const response = await request(app)
+      .post("/quotations")
+      .set("Authorization", `Bearer ${vendorToken}`) // set the token in the test
+      .send({
+        quotation_request_id: newRequest._id,
+        quotation_file: "image.png",
+        quotation_status: "accepted",
+      });
+
+    expect(response.statusCode).toEqual(400);
+    expect(response.body).toBeInstanceOf(Object);
+  });
+
   // it("Upload quotations should succeed", async () => {
   //   const response = await request(app)
   //     .post("/quotations")

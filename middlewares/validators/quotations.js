@@ -31,6 +31,18 @@ exports.createQuotationValidator = async (req, res, next) => {
   try {
     const errorMessages = [];
 
+    // check if previous quotation for a request exists
+    const getQuotation = await Quotation.findOne({
+      quotation_request_id: req.body.quotation_request_id,
+    });
+
+    if (getQuotation) {
+      return next({
+        statusCode: 400,
+        message: "You have previously sent a quotation to this request before.",
+      });
+    }
+
     // get vendor data based on currently logged in vendor
     const getVendor = await vendor.findOne({ _id: req.vendor.user });
     req.body.quotation_vendor_id = getVendor._id;
