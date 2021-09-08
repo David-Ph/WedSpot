@@ -15,7 +15,7 @@ beforeAll(async () => {
     user_password: "Oke12345!",
   });
 
-  user_token = jwt.sign({ User: user1._id }, process.env.JWT_SECRET);
+  user_token = jwt.sign({ user: user1._id }, process.env.JWT_SECRET);
 });
 
 describe("User Signup", () => {
@@ -83,7 +83,7 @@ describe("User Signup", () => {
 describe("User Signin", () => {
   it("Signin success", async () => {
     const res = await request(app).post("/user/login").send({
-      user_email: "unittest@email.com",
+      user_email: data[0].user_email,
       user_password: "Oke12345!",
     });
     expect(res.statusCode).toEqual(200);
@@ -119,7 +119,7 @@ describe("User Signin", () => {
 
   it("Wrong user_password should fail", async () => {
     const res = await request(app).post("/user/login").send({
-      user_email: "testing1@gmail.com",
+      user_email: data[0].user_email,
       user_password: "Oke123",
     });
     expect(res.statusCode).toEqual(401);
@@ -145,100 +145,164 @@ describe("Get my profile", () => {
   });
 });
 
-// describe("Update User", () => {
-//   it("updateUser success", async () => {
-//     const res = await request(app)
-//       .put(`/user/edit`)
-//       .set("Authorization", `Bearer ${user_token}`)
-//       .send({
-//         user_fullname: faker.name.findName(),
-//         user_email: faker.internet.email(),
-//         user_birthday: "1990-03-27",
-//         user_password: "Oke12345!",
-//       });
-//     expect(res.statusCode).toEqual(201);
-//     expect(res.body).toBeInstanceOf(Object);
-//   });
+describe("Update User", () => {
+  it("updateUser success", async () => {
+    const res = await request(app)
+      .put(`/user/edit`)
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: faker.name.findName(),
+        user_email: faker.internet.email(),
+        user_birthday: "1990-03-27",
+        user_password: "Oke123456!",
+        user_old_password: "Oke12345!",
+      });
+    expect(res.statusCode).toEqual(201);
+    expect(res.body).toBeInstanceOf(Object);
+  });
 
-//   it("Duplicate Email and should fail", async () => {
-//     const res = await request(app)
-//       .put("/user/edit")
-//       .set("Authorization", `Bearer ${user_token}`)
-//       .send({
-//         user_fullname: faker.name.findName(),
-//         email: data[0].user_email,
-//         user_birthday: "1990-03-27",
-//         user_password: "Oke12345!",
-//       });
-//     expect(res.statusCode).toEqual(500);
-//     expect(res.body).toBeInstanceOf(Object);
-//   });
+  it("Duplicate Email and should fail", async () => {
+    const res = await request(app)
+      .put("/user/edit")
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: faker.name.findName(),
+        user_email: data[0].user_email,
+        user_birthday: "1990-03-27",
+      });
+    expect(res.statusCode).toEqual(500);
+    expect(res.body).toBeInstanceOf(Object);
+  });
 
-//   it("user_fullname that contains symbols should fail", async () => {
-//     const res = await request(app)
-//       .put("/user/edit")
-//       .set("Authorization", `Bearer ${user_token}`)
-//       .send({
-//         user_fullname: "&^&^&^&",
-//         email: faker.internet.email(),
-//         user_birthday: "1990-03-27",
-//         user_password: "Oke12345!",
-//       });
-//     expect(res.statusCode).toEqual(400);
-//     expect(res.body).toBeInstanceOf(Object);
-//   });
+  it("user_fullname that contains symbols should fail", async () => {
+    const res = await request(app)
+      .put("/user/edit")
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: "&^&^&^&",
+        user_email: faker.internet.email(),
+        user_birthday: "1990-03-27",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
 
-//   it("user_fullname length less than 3 should fail", async () => {
-//     const res = await request(app)
-//       .put("/user/edit")
-//       .set("Authorization", `Bearer ${user_token}`)
-//       .send({
-//         user_fullname: "da",
-//         email: faker.internet.email(),
-//         user_birthday: "1990-03-27",
-//         user_password: "Oke12345!",
-//       });
-//     expect(res.statusCode).toEqual(400);
-//     expect(res.body).toBeInstanceOf(Object);
-//   });
+  it("user_fullname length less than 3 should fail", async () => {
+    const res = await request(app)
+      .put("/user/edit")
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: "da",
+        user_email: faker.internet.email(),
+        user_birthday: "1990-03-27",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
 
-//   it("updating invalid email should fail", async () => {
-//     const res = await request(app)
-//       .put("/user/edit")
-//       .set("Authorization", `Bearer ${user_token}`)
-//       .send({
-//         user_fullname: "daddy",
-//         email: "notanemail",
-//         user_birthday: "1990-03-27",
-//         user_password: "Oke12345!",
-//       });
-//     expect(res.statusCode).toEqual(400);
-//     expect(res.body).toBeInstanceOf(Object);
-//   });
+  it("user_fullname Empty should fail", async () => {
+    const res = await request(app)
+      .put("/user/edit")
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: "",
+        user_email: faker.internet.email(),
+        user_birthday: "1990-03-27",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
 
-//   it("updating weak user_password should fail", async () => {
-//     const res = await request(app)
-//       .put("/user/edit")
-//       .set("Authorization", `Bearer ${user_token}`)
-//       .send({
-//         user_fullname: "daddy",
-//         email: faker.internet.email(),
-//         user_birthday: "1990-03-27",
-//         user_password: "hehe",
-//       });
-//     expect(res.statusCode).toEqual(400);
-//     expect(res.body).toBeInstanceOf(Object);
-//   });
+  it("updating invalid email should fail", async () => {
+    const res = await request(app)
+      .put("/user/edit")
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: "daddy",
+        user_email: "notanemail",
+        user_birthday: "1990-03-27",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
 
-//   it("updating user without auth token should fail", async () => {
-//     const res = await request(app).put("/user/edit").send({
-//       user_fullname: faker.name.findName(),
-//       email: faker.internet.email(),
-//       user_birthday: "1990-03-27",
-//       user_password: "Oke12345!",
-//     });
+  it("updating Empty email should fail", async () => {
+    const res = await request(app)
+      .put("/user/edit")
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: "daddy",
+        user_email: "",
+        user_birthday: "1990-03-27",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
 
-//     expect(res.statusCode).toEqual(403);
-//     expect(res.body).toBeInstanceOf(Object);
-//   });
-// });
+  it(" Updating wrong format brithday should fail", async () => {
+    const res = await request(app)
+      .put("/user/edit")
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: "daddy",
+        user_email: faker.internet.email(),
+        user_birthday: "1990-03",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+
+  it(" Updating Empty user_brithday should fail", async () => {
+    const res = await request(app)
+      .put("/user/edit")
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: "daddy",
+        user_email: faker.internet.email(),
+        user_birthday: "",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+
+  it("update Weak password", async () => {
+    const res = await request(app)
+      .put(`/user/edit`)
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: faker.name.findName(),
+        user_email: faker.internet.email(),
+        user_birthday: "1990-03-27",
+        user_password: "Oke",
+        user_old_password: "Oke123456!",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+
+  it("update Wrong old password", async () => {
+    const res = await request(app)
+      .put(`/user/edit`)
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: faker.name.findName(),
+        user_email: faker.internet.email(),
+        user_birthday: "1990-03-27",
+        user_password: "Oke12345!",
+        user_old_password: "Oke!",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+
+  it("updating user without auth token should fail", async () => {
+    const res = await request(app).put("/user/edit").send({
+      user_fullname: faker.name.findName(),
+      user_email: faker.internet.email(),
+      user_birthday: "1990-03-27",
+    });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+});

@@ -1,6 +1,8 @@
 const { add_users, delete_users } = require("./user");
 const { addPackages, deletePackages } = require("./packages");
 const { addVendors, deleteVendors } = require("./vendors");
+const { deleteQuotations } = require("./quotations");
+const { deleteRequests } = require("./requests");
 
 async function add() {
   await add_users();
@@ -9,7 +11,13 @@ async function add() {
 }
 
 async function remove() {
-  await Promise.all([deletePackages(), delete_users(), deleteVendors()]);
+  await Promise.all([
+    deletePackages(),
+    delete_users(),
+    deleteVendors(),
+    deleteQuotations(),
+    deleteRequests(),
+  ]);
 }
 
 if (process.argv[2] === "add") {

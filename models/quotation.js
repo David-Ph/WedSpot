@@ -59,8 +59,25 @@ quotationSchema.statics.updateRequestStatus = async function (request_id) {
   }
 };
 
+quotationSchema.statics.updateRequestQuotationId = async function (
+  request_id,
+  quotation_id
+) {
+  try {
+    await this.model("Request").findByIdAndUpdate(request_id, {
+      request_quotation_id: quotation_id,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 quotationSchema.post("save", function () {
   this.constructor.updateRequestStatus(this.quotation_request_id);
+  this.constructor.updateRequestQuotationId(
+    this.quotation_request_id,
+    this._id
+  );
 });
 
 // Enable soft delete, it will make delete column automaticly
