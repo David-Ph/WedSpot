@@ -17,7 +17,19 @@ class QuotationController {
       })
         .sort({ [sortField]: orderBy })
         .limit(limit)
-        .skip(skipCount);
+        .skip(skipCount)
+        .populate(
+          "quotation_vendor_id",
+          "_id vendor_email vendor_avatar vendor_name vendor_rating"
+        )
+        .populate(
+          "quotation_user_id",
+          "_id user_avatar user_fullname user_email"
+        )
+        .populate(
+          "quotation_request_id",
+          "-__v -created_at -updated_at -id -_id -request_status -request_quotation_id -request_user_id -request_vendor_id"
+        );
 
       let count = await Quotation.count({
         quotation_user_id: req.user.user,
@@ -49,7 +61,19 @@ class QuotationController {
       })
         .sort({ [sortField]: orderBy })
         .limit(limit)
-        .skip(skipCount);
+        .skip(skipCount)
+        .populate(
+          "quotation_vendor_id",
+          "_id vendor_email vendor_avatar vendor_name vendor_rating"
+        )
+        .populate(
+          "quotation_user_id",
+          "_id user_avatar user_fullname user_email"
+        )
+        .populate(
+          "quotation_request_id",
+          "-__v -created_at -updated_at -id -_id -request_status -request_quotation_id -request_user_id -request_vendor_id"
+        );
 
       let count = await Quotation.count({
         quotation_vendor_id: req.vendor.user,
@@ -69,7 +93,20 @@ class QuotationController {
     try {
       let data = await Quotation.findOne({
         _id: req.params.id,
-      }).populate("quotation_request_id");
+      })
+        .populate("quotation_request_id")
+        .populate(
+          "quotation_vendor_id",
+          "_id vendor_email vendor_avatar vendor_name vendor_rating"
+        )
+        .populate(
+          "quotation_user_id",
+          "_id user_avatar user_fullname user_email"
+        )
+        .populate(
+          "quotation_request_id",
+          "-__v -created_at -updated_at -id -_id -request_status -request_quotation_id -request_user_id -request_vendor_id"
+        );
 
       if (!data) {
         return next({ statusCode: 404, message: "Quotation not found" });
