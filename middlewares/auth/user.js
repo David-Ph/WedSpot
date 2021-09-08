@@ -134,6 +134,44 @@ passport.use(
   )
 );
 
+// Logic for user
+exports.visitorOrUser = (req, res, next) => {
+  passport.authorize("visitorOrUser", { session: false }, (err, user, info) => {
+    if (err) {
+      return next({ message: "Something went wrong", statusCode: 403 });
+    }
+
+    if (user) {
+      req.user = user;
+    }
+
+    next();
+  })(req, res, next);
+};
+
+passport.use(
+  "visitorOrUser",
+  new JWTstrategy(
+    {
+      secretOrKey: process.env.JWT_SECRET,
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    },
+    async (token, done) => {
+      try {
+        const data = await User.findOne({ _id: token.user });
+
+        if (data) {
+          return done(null, token);
+        }
+
+        return done(null, false);
+      } catch (error) {
+        return done(error, false, { message: "Forbidden access" });
+      }
+    }
+  )
+);
+
 exports.googleSignIn = passport.authenticate("google", {
   session: false,
   scope: ["profile", "email", "openid"],

@@ -2,7 +2,7 @@ const request = require("supertest");
 const faker = require("faker");
 const jwt = require("jsonwebtoken");
 const app = require("../app");
-const { Package, User, vendor } = require("../models");
+const { Package, User, vendor, Request } = require("../models");
 let packageData = [];
 let customerToken = "";
 let vendorToken = "";
@@ -10,6 +10,7 @@ let organizerToken = "";
 let customer;
 let venueVendor;
 let organizerVendor;
+let newRequest;
 
 beforeAll(async () => {
   packageData = await Package.find();
@@ -32,6 +33,19 @@ beforeAll(async () => {
     vendor_email: faker.internet.email(),
     vendor_password: "Aneh123!!",
     vendor_type: "organizer",
+  });
+
+  newRequest = await Request.create({
+    request_user_id: customer._id,
+    request_package_id: packageData[1]._id,
+    request_vendor_id: packageData[1].package_vendor_id,
+    request_groom_name: "McGroom",
+    request_bride_name: "McBride",
+    request_city: "bandung",
+    request_wedding_location: "bandung",
+    request_budget: 50000000,
+    request_wedding_date: "12-05-2021",
+    request_invitees: 100,
   });
 
   // create a token based off that customer or vendor
@@ -195,6 +209,17 @@ describe("GET /packages", () => {
     expect(response.statusCode).toEqual(200);
     expect(response.body).toBeInstanceOf(Object);
   });
+
+  it("Get package by id should have pending request", async () => {
+    const response = await request(app)
+      .get(`/packages/${packageData[1]._id}`)
+      .set("Authorization", `Bearer ${customerToken}`);
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body.has_request_pending).toEqual(true);
+  });
+
   it("Get package by id not found", async () => {
     const response = await request(app).get(
       `/packages/61248b5ad302b53b72363705`

@@ -7,6 +7,7 @@ const upload = multer({ storage: storage });
 // ? Import user auth
 /////////////////////
 const { vendor } = require("../middlewares/auth/vendor");
+const { visitorOrUser } = require("../middlewares/auth/user");
 
 // ? import controllers
 // //////////////////////
@@ -37,7 +38,7 @@ router.get(
 );
 router.get("/count", PackageController.getPackagesCount);
 router.get("/archive", vendor, PackageController.getArchivedPackage);
-router.get("/:id", PackageController.getPackageById);
+router.get("/:id", visitorOrUser, PackageController.getPackageById);
 router.put(
   "/:id",
   upload.array("package_album"),

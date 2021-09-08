@@ -1,4 +1,4 @@
-const { Package } = require("../models");
+const { Package, Request } = require("../models");
 
 class PackageController {
   async getPackagesCount(req, res, next) {
@@ -80,7 +80,27 @@ class PackageController {
         return next({ statusCode: 404, message: "Package not found" });
       }
 
-      res.status(200).json({ data, message: "Package found!" });
+      let hasRequestPending = false;
+      if (req.user) {
+        let findRequests = await Request.find({
+          request_user_id: req.user.user,
+          request_status: false,
+        });
+
+        findRequests = findRequests.filter((request) => {
+          return request.request_package_id._id == req.params.id;
+        });
+
+        if (findRequests.length > 0) {
+          hasRequestPending = true;
+        }
+      }
+
+      res.status(200).json({
+        data,
+        message: "Package found!",
+        has_request_pending: hasRequestPending,
+      });
     } catch (error) {
       next(error);
     }
