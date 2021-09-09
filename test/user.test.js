@@ -295,6 +295,21 @@ describe("Update User", () => {
     expect(res.body).toBeInstanceOf(Object);
   });
 
+  it("update Empty old password", async () => {
+    const res = await request(app)
+      .put(`/user/edit`)
+      .set("Authorization", `Bearer ${user_token}`)
+      .send({
+        user_fullname: faker.name.findName(),
+        user_email: faker.internet.email(),
+        user_birthday: "1990-03-27",
+        user_password: "Oke12345!",
+        user_old_password: "",
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+
   it("updating user without auth token should fail", async () => {
     const res = await request(app).put("/user/edit").send({
       user_fullname: faker.name.findName(),
