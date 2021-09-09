@@ -68,11 +68,59 @@ const requestSchema = new mongoose.Schema(
   }
 );
 
+requestSchema.statics.sendNotification = async function (request) {
+  try {
+    const findVendor = await this.model("Vendor").findOne({
+      _id: vendor_id,
+    });
+    const findUser = await this.model("User").findOne({
+      _id: user_id,
+    });
+
+    const userNotification = await this.model("Notification").create({
+      notification_title: "Your request has already been sent",
+      notification_body: `Yay! Your request for quotation has been sent to ${findVendor.vendor_name}`,
+      notification_forUser: findUser._id,
+      notification_payload: {
+        request_id: request._id,
+        request_vendor_id: request.request_vendor_id,
+        request_user_id: request.request_user_id,
+        request_package_id: request.request_package_id._id,
+      },
+      notification_type: "request",
+    });
+
+    const vendorNotification = await this.model("Notification").create({
+      notification_title: "Request for quotation!",
+      notification_body: `You have 1 request for quotation`,
+      notification_forVendor: findVendor._id,
+      notification_payload: {
+        request_id: findRequest._id,
+        request_vendor_id: findRequest.request_vendor_id,
+        request_user_id: findRequest.request_user_id,
+        request_package_id: findRequest.request_package_id._id,
+      },
+      notification_type: "request",
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 requestSchema.virtual("quotation", {
   ref: "Quotation",
   localField: "_id",
   foreignField: "quotation_request_id",
   justOne: true,
+});
+
+requestSchema.post("save", function () {
+  this.constructor.sendNotification(
+    this.request_vendor_id,
+    this.request_user_id,
+    this._id,
+    this
+  );
 });
 
 // Enable soft delete, it will make delete column automaticly
