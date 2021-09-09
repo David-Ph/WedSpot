@@ -71,10 +71,10 @@ const requestSchema = new mongoose.Schema(
 requestSchema.statics.sendNotification = async function (request) {
   try {
     const findVendor = await this.model("Vendor").findOne({
-      _id: vendor_id,
+      _id: request.request_vendor_id,
     });
     const findUser = await this.model("User").findOne({
-      _id: user_id,
+      _id: request.request_user_id,
     });
 
     const userNotification = await this.model("Notification").create({
@@ -95,10 +95,10 @@ requestSchema.statics.sendNotification = async function (request) {
       notification_body: `You have 1 request for quotation`,
       notification_forVendor: findVendor._id,
       notification_payload: {
-        request_id: findRequest._id,
-        request_vendor_id: findRequest.request_vendor_id,
-        request_user_id: findRequest.request_user_id,
-        request_package_id: findRequest.request_package_id._id,
+        request_id: request._id,
+        request_vendor_id: request.request_vendor_id,
+        request_user_id: request.request_user_id,
+        request_package_id: request.request_package_id._id,
       },
       notification_type: "request",
     });
@@ -115,12 +115,7 @@ requestSchema.virtual("quotation", {
 });
 
 requestSchema.post("save", function () {
-  this.constructor.sendNotification(
-    this.request_vendor_id,
-    this.request_user_id,
-    this._id,
-    this
-  );
+  this.constructor.sendNotification(this);
 });
 
 // Enable soft delete, it will make delete column automaticly
