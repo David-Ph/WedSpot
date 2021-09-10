@@ -23,6 +23,38 @@ class Vendor {
     }
   }
 
+  async getTokenOAuth(req, res, next) {
+    try {
+      const data = {
+        user: req.vendor._id,
+      };
+
+      const token = jwt.sign(data, process.env.JWT_SECRET, {
+        expiresIn: "60d",
+      });
+
+      res.redirect(process.env.VENDOR_FE_CALLBACK + "?token=" + token);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getTokenOAuthMobile(req, res, next) {
+    try {
+      const data = {
+        user: req.vendor._id,
+      };
+
+      const token = jwt.sign(data, process.env.JWT_SECRET, {
+        expiresIn: "60d",
+      });
+
+      res.redirect(process.env.VENDOR_RN_CALLBACK + "?token=" + token);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getMe(req, res, next) {
     try {
       const data = await vendor

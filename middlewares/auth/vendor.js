@@ -255,6 +255,8 @@ passport.use(
   )
 );
 
+// * For FE OAuth
+
 exports.googleSignIn = passport.authenticate("vendorOAuth", {
   session: false,
   scope: ["profile", "email", "openid"],
@@ -262,7 +264,7 @@ exports.googleSignIn = passport.authenticate("vendorOAuth", {
 
 exports.googleRedirect = passport.authenticate("vendorOAuth", {
   session: false,
-  failureRedirect: "/vendors/failed",
+  failureRedirect: "/vendors/failed", //TODO Should be redirect url from front end
 });
 
 exports.addVendorRedirect = (req, res, next) => {
@@ -281,6 +283,46 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_REDIRECT_URI_VENDOR,
+    },
+    async function (accessToken, refreshToken, profile, cb) {
+      try {
+        let findVendor = await vendor.findOne({
+          vendor_email: profile._json.email,
+        });
+        if (!findVendor) {
+          findVendor = await vendor.create({
+            vendor_name: profile._json.name,
+            vendor_email: profile._json.email,
+          });
+        }
+
+        return cb(null, findVendor);
+      } catch (error) {
+        return cb(error, false, { message: "Forbidden access" });
+      }
+    }
+  )
+);
+
+// * For Mobile OAuth
+
+exports.googleSignInMobile = passport.authenticate("vendorOAuthMobile", {
+  session: false,
+  scope: ["profile", "email", "openid"],
+});
+
+exports.googleRedirectMobile = passport.authenticate("vendorOAuthMobile", {
+  session: false,
+  failureRedirect: "/vendors/failed", //TODO Should be redirect url from mobile
+});
+
+passport.use(
+  "vendorOAuthMobile",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_REDIRECT_URI_VENDOR_MOBILE,
     },
     async function (accessToken, refreshToken, profile, cb) {
       try {

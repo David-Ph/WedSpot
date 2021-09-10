@@ -12,6 +12,8 @@ const {
   user,
   googleRedirect,
   googleSignIn,
+  googleSignInMobile,
+  googleRedirectMobile,
 } = require("../middlewares/auth/user");
 const { user_validator } = require("../middlewares/validators/user");
 
@@ -23,7 +25,12 @@ const {
 
 const { update_user } = require("../controllers/user");
 
-const { get_token, get_me } = require("../controllers/user_auth.js");
+const {
+  get_token,
+  get_me,
+  get_token_oauth,
+  get_token_oauth_mobile,
+} = require("../controllers/user_auth.js");
 
 // make router
 const router = express.Router();
@@ -39,9 +46,22 @@ router.put(
   user_validator,
   update_user
 );
+
+// * For google oAuth Front End
 router.get("/auth/google", googleSignIn);
-router.get("/auth/google/redirect", googleRedirect, get_token);
+router.get("/auth/google/redirect", googleRedirect, get_token_oauth);
 router.get("/failed", (req, res) =>
+  res.status(401).json({ message: "Login failed" })
+);
+
+// * For google oAuth Mobile
+router.get("/auth/google/mobile", googleSignInMobile);
+router.get(
+  "/auth/google/mobile/redirect",
+  googleRedirectMobile,
+  get_token_oauth_mobile
+);
+router.get("/failed/mobile", (req, res) =>
   res.status(401).json({ message: "Login failed" })
 );
 
