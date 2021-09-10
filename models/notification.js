@@ -47,6 +47,9 @@ const notificationSchema = new mongoose.Schema(
         delete ret.id;
         delete ret._id;
         delete ret.deleted;
+        delete ret.notification_forUser;
+        delete ret.notification_forVendor;
+        delete ret.notification_type;
       },
     },
   }

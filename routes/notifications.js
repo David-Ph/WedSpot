@@ -8,17 +8,43 @@ const { vendor } = require("../middlewares/auth/vendor");
 
 // ? import controllers
 // ////////////////////
+const NotificationController = require("../controllers/notifications");
 
-// ? import validators
+// ? Import validators
 // ///////////////////
+const {
+  queryNotificationValidator,
+  checkUserValidator,
+  checkVendorValidator,
+} = require("../middlewares/validators/notifications");
 
 // ? set routers
 // /////////////
-router.get("/user"); // getNotificationByUser
-router.get("/user/:id"); // update notification status for user
+router.get(
+  "/user",
+  user,
+  queryNotificationValidator,
+  NotificationController.getNotifUser
+);
+router.put(
+  "/user/:id",
+  user,
+  checkUserValidator,
+  NotificationController.updateNotificationUser
+);
 
-router.put("/vendor"); // getNotificationByVendor
-router.put("/vendor/:id"); // update notification status for vendor
+router.get(
+  "/vendor",
+  vendor,
+  queryNotificationValidator,
+  NotificationController.getNotifVendor
+);
+router.put(
+  "/vendor/:id",
+  vendor,
+  checkVendorValidator,
+  NotificationController.updateNotificationVendor
+);
 
 // ? exports router
 // ////////////////
