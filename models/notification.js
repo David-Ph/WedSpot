@@ -22,7 +22,7 @@ const notificationSchema = new mongoose.Schema(
     notification_isNew: {
       type: Boolean,
       required: true,
-      default: false,
+      default: true,
     },
     notification_payload: {
       type: mongoose.Schema.Types.Mixed,

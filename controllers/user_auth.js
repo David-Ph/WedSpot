@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken"); // import jwt
-const { User } = require("../models");
+const { User, Notification } = require("../models");
 
 class Auth {
   async get_token(req, res, next) {
@@ -18,7 +18,12 @@ class Auth {
         "-updated_At",
       ]);
 
-      res.status(200).json({ token, current_user });
+      const newNotifications = await Notification.count({
+        notification_forUser: req.user._id,
+        notification_isNew: true,
+      });
+
+      res.status(200).json({ token, current_user, newNotifications });
     } catch (error) {
       next(error);
     }
