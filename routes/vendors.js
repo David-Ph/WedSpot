@@ -12,6 +12,8 @@ const {
   googleSignIn,
   googleRedirect,
   addVendorRedirect,
+  googleRedirectMobile,
+  googleSignInMobile,
 } = require("../middlewares/auth/vendor");
 
 // vendor validator from vendor
@@ -34,7 +36,12 @@ const {
 } = require("../controllers/vendors");
 
 // Import controller from auth
-const { getToken, getMe } = require("../controllers/auth");
+const {
+  getToken,
+  getMe,
+  getTokenOAuth,
+  getTokenOAuthMobile,
+} = require("../controllers/auth");
 const vendors = require("../controllers/vendors");
 
 // Make router
@@ -61,18 +68,31 @@ router.put(
   updateVendor
 );
 router.get("/:id", getVendorById);
+// router.delete("/getMe", vendorValidator, deleteVendor, getMe);
+
+// * For Front End google oAuth
 router.get("/auth/google", googleSignIn);
 router.get(
   "/auth/google/redirect",
   googleRedirect,
   addVendorRedirect,
-  getToken
+  getTokenOAuth
 );
 router.get("/failed", (req, res) =>
   res.status(401).json({ message: "Login failed" })
 );
 
-// router.delete("/getMe", vendorValidator, deleteVendor, getMe);
+// * For Mobile google oAuth
+router.get("/auth/google/mobile", googleSignInMobile);
+router.get(
+  "/auth/google/mobile/redirect",
+  googleRedirectMobile,
+  addVendorRedirect,
+  getTokenOAuthMobile
+);
+router.get("/failed/mobile", (req, res) =>
+  res.status(401).json({ message: "Login failed" })
+);
 
 // Exports
 module.exports = router;

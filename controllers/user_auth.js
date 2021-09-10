@@ -24,6 +24,38 @@ class Auth {
     }
   }
 
+  async get_token_oauth(req, res, next) {
+    try {
+      const data = {
+        user: req.user._id,
+      };
+
+      const token = jwt.sign(data, process.env.JWT_SECRET, {
+        expiresIn: "60d",
+      });
+
+      res.redirect(process.env.USER_FE_CALLBACK + "?token=" + token);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async get_token_oauth_mobile(req, res, next) {
+    try {
+      const data = {
+        user: req.user._id,
+      };
+
+      const token = jwt.sign(data, process.env.JWT_SECRET, {
+        expiresIn: "60d",
+      });
+
+      res.redirect(process.env.USER_RN_CALLBACK + "?token=" + token);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async get_me(req, res, next) {
     try {
       const data = await User.findOne({ _id: req.user.user }).select(
