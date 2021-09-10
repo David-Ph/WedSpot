@@ -3,6 +3,8 @@ const { addPackages, deletePackages } = require("./packages");
 const { addVendors, deleteVendors } = require("./vendors");
 const { deleteQuotations } = require("./quotations");
 const { deleteRequests } = require("./requests");
+const { deleteNotifications } = require("./notifications");
+const { deleteTodos } = require("./todos");
 
 async function add() {
   await add_users();
@@ -17,6 +19,8 @@ async function remove() {
     deleteVendors(),
     deleteQuotations(),
     deleteRequests(),
+    deleteNotifications(),
+    deleteTodos(),
   ]);
 }
 

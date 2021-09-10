@@ -65,10 +65,6 @@ class NotificationController {
         { new: true }
       );
 
-      if (!newData) {
-        return next({ statusCode: 404, message: "Notification not found" });
-      }
-
       res
         .status(201)
         .json({ newData, message: "Notification successfully updated!" });
@@ -84,12 +80,6 @@ class NotificationController {
         { notification_isNew: false },
         { new: true }
       );
-
-      console.log(newData);
-
-      if (!newData) {
-        return next({ statusCode: 404, message: "Notification not found" });
-      }
 
       res
         .status(201)

@@ -29,18 +29,16 @@ exports.queryNotificationValidator = async (req, res, next) => {
 
 exports.checkUserValidator = async (req, res, next) => {
   try {
-    const errorMessages = [];
-
     const findNotification = await Notification.findOne({
       _id: req.params.id,
     });
 
-    if (findNotification?.notification_forUser != req.user.user) {
-      return next({ statusCode: 403, message: "Forbidden access" });
+    if (!findNotification) {
+      return next({ statusCode: 404, message: "Notification not found" });
     }
 
-    if (errorMessages.length > 0) {
-      return next({ statusCode: 400, messages: errorMessages });
+    if (findNotification?.notification_forUser != req.user.user) {
+      return next({ statusCode: 403, message: "Forbidden access" });
     }
 
     next();
@@ -51,18 +49,16 @@ exports.checkUserValidator = async (req, res, next) => {
 
 exports.checkVendorValidator = async (req, res, next) => {
   try {
-    const errorMessages = [];
-
     const findNotification = await Notification.findOne({
       _id: req.params.id,
     });
 
-    if (findNotification?.notification_forVendor != req.vendor.user) {
-      return next({ statusCode: 403, message: "Forbidden access" });
+    if (!findNotification) {
+      return next({ statusCode: 404, message: "Notification not found" });
     }
 
-    if (errorMessages.length > 0) {
-      return next({ statusCode: 400, messages: errorMessages });
+    if (findNotification?.notification_forVendor != req.vendor.user) {
+      return next({ statusCode: 403, message: "Forbidden access" });
     }
 
     next();
