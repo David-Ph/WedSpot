@@ -11,12 +11,23 @@ const organizerServices = ["planner", "organizer"];
 const locations = [
   "bandung",
   "jakarta",
-  "singapore",
   "johor",
   "batam",
   "malang",
   "depok",
-  "pyongyang",
+  "bogor",
+  "surabaya",
+  "yogyakarta",
+  "kute",
+  "banyuwangi",
+  "denpasar",
+  "padang",
+  "mataram",
+  "semarang",
+  "palembang",
+  "balikpapan",
+  "makassar",
+  "pontianak",
 ];
 
 const samplePrices = [
@@ -111,6 +122,111 @@ const packageAlbums = [
   "https://images.unsplash.com/photo-1505944357431-27579db47558?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=480&ixid=MnwxfDB8MXxyYW5kb218MHx8d2VkZGluZ3x8fHx8fDE2MzAxMzg2MzU&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=640",
 ];
 
+const weddingVenue = [
+  "Dream Wedding",
+  "Sunset View Wedding",
+  "Wedding Wonderland",
+  "Big Day Celebrations",
+  "Glittering Waves",
+  "Heaven on Earth",
+  "Wedding Oasis",
+  "Royal Oak",
+  "Beyond Beautiful",
+  "Serenity Grove",
+  "Joyful Weddings",
+  "Divine Valley",
+  "Lovely Waterside",
+  "Natural Paradise",
+  "Graceful Gardens",
+  "Shimmering Horizon",
+  "Perfect Wedding Paradise",
+  "Lakeside Lagoon",
+  "Wedding Cove",
+  "Rocky Mountain Lodge",
+  "Tropical Villa",
+  "Grand Manor",
+];
+
+const weddingOrganizer = [
+  "I Do Events",
+  "Forever Eva",
+  "Everlasting Events",
+  "Big Day Planners",
+  "Juss Married",
+  "Inspire Events",
+  "Dream Plan",
+  "Gatheringz Co",
+  "Bright Occasions",
+  "Sunny Future",
+  "Nu Beginnings",
+  "Drawn Togetha",
+  "Grand Time",
+  "Joint Familiez",
+  "Roses and Co",
+  "Tux n Gown",
+  "Roses and Co",
+  "Sunshine Daizies",
+  "Aurora Planning",
+  "Galactic Planner",
+];
+
+const weddingPackages = [
+  "Silver Package",
+  "Bronze Package",
+  "Gold Package",
+  "Happiness Package",
+  "Basic Package",
+  "Expanded Package",
+  "Full Day Package",
+  "Paris Hilton Package",
+  "Silk Package",
+  "Lace Package",
+  "Chiffon Package",
+  "Lace Package",
+  "Celebration Package",
+  "Gala Package",
+  "Festival Package",
+  "Sapphire Package",
+  "Ruby Package",
+  "Diamond Package",
+  "True Love Package",
+  "The Bridal Package",
+  "True Love is a Lie Package",
+  "Bride Leaving the Groom at the Altar Package",
+  "I Object Package",
+  "I Love Somebody Else Package",
+];
+
+const packageDetails = [
+  `
+    - Area taman dengan rumput sintetis
+    - Balai Taman
+    - Ruang rias gratis
+    - Penggunaan seharian penuh (7 pagi sampai 10 malam)
+    - 1 Junior Suite untuk 1 malam di Grand Mercure Hotel
+    - Penggunaan listrik 10.000 watt
+    - Sesi pra-pernikahan gratis
+    - Layanan kebersihan pada hari acara, keamanan, lingkungan, dan izin polisi
+  `,
+  `
+    - For Akad/Holy Matrimony dan Wedding Reception
+    - 15-20 crews
+    - Work stars upon completion of contract signing and down payment
+    - Unlimited consultation via phone call or chat up to 15 face to face meetings.
+    - Carrying out timelines, budgeting plan, and wedding checklist
+    - Strategically assembling the most suitable vendors based on the questionnaire
+    - Scheduling vendors meeting and become the contact person for all vendors
+    - Arranging a family meeting for both sides of the family
+    - Arranging a Technical Meeting with all the booked vendors to oversee each and every detail of the wedding
+    - Monitoring all the booked vendors during preparation and execution.
+    - Providing Wedding Report
+    - Ensuring that everything runs smoothly by paying attention
+
+    * Maximum 10 working hours
+    * Additional charge may apply
+  `,
+];
+
 module.exports = {
   venueServices,
   organizerServices,
@@ -121,4 +237,8 @@ module.exports = {
   vendorHeaders,
   vendorAvatars,
   packageAlbums,
+  weddingOrganizer,
+  weddingVenue,
+  weddingPackages,
+  packageDetails,
 };
