@@ -40,8 +40,14 @@ class PackageController {
       if (req.query.location) subQuery.package_location = req.query.location;
 
       // ? search tags
+      // if (req.query.search)
+      //   subQuery.package_services = new RegExp(req.query.search, "i")
+
       if (req.query.search)
-        subQuery.package_services = new RegExp(req.query.search, "i");
+        subQuery.$or = [
+          { package_services: new RegExp(req.query.search, "i") },
+          { package_name: new RegExp(req.query.search, "i") },
+        ];
 
       // ? pagination
       const page = req.query.page;
