@@ -6,6 +6,8 @@ const {
   samplePrices,
   sampleCapacity,
   packageAlbums,
+  weddingPackages,
+  packageDetails,
 } = require("../config/services");
 const { Package, vendor } = require("../models"); // TODO should add vendor later
 
@@ -23,14 +25,16 @@ async function addPackages() {
       }
 
       const randomIndex = Math.floor(Math.random() * sampleCapacity.length);
+      const packageIndex = Math.floor(Math.random() * weddingPackages.length);
+      const detailsIndex = Math.floor(Math.random() * packageDetails.length);
 
       const newPackage = await Package.create({
         package_vendor_id: vendors[vendorIndex]._id,
         package_type: vendors[vendorIndex].vendor_type,
-        package_name: faker.commerce.productName(),
+        package_name: `${vendors[vendorIndex].vendor_name} ${weddingPackages[packageIndex]}`,
         package_location:
           locations[Math.floor(Math.random() * locations.length)],
-        package_details: faker.lorem.words(50),
+        package_details: packageDetails[detailsIndex],
         package_price:
           samplePrices[Math.floor(Math.random() * samplePrices.length)],
         package_services: services,
