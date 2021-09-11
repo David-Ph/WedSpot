@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    provider: {
+      type: String,
+      default: null,
+    },
   },
   {
     // Enables timestamps

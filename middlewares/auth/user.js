@@ -200,6 +200,7 @@ passport.use(
             user_fullname: profile._json.name,
             user_email: profile._json.email,
             user_avatar: profile._json.picture,
+            provider: "google",
           });
         }
 
@@ -240,6 +241,7 @@ passport.use(
             user_fullname: profile._json.name,
             user_email: profile._json.email,
             user_avatar: profile._json.picture,
+            provider: "google",
           });
         }
 
