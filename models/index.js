@@ -18,3 +18,4 @@ exports.Package = require("./package");
 exports.Request = require("./request");
 exports.Quotation = require("./quotation");
 exports.Todo = require("./todo");
+exports.Notification = require("./notification");

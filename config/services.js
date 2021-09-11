@@ -11,12 +11,23 @@ const organizerServices = ["planner", "organizer"];
 const locations = [
   "bandung",
   "jakarta",
-  "singapore",
   "johor",
   "batam",
   "malang",
   "depok",
-  "pyongyang",
+  "bogor",
+  "surabaya",
+  "yogyakarta",
+  "kute",
+  "banyuwangi",
+  "denpasar",
+  "padang",
+  "mataram",
+  "semarang",
+  "palembang",
+  "balikpapan",
+  "makassar",
+  "pontianak",
 ];
 
 const samplePrices = [
@@ -130,8 +141,8 @@ const weddingVenue = [
   "Shimmering Horizon",
   "Perfect Wedding Paradise",
   "Lakeside Lagoon",
-  "Wedding Cove ",
-  "Rocky Mountain Lodge ",
+  "Wedding Cove",
+  "Rocky Mountain Lodge",
   "Tropical Villa",
   "Grand Manor",
 ];
@@ -186,6 +197,36 @@ const weddingPackages = [
   "I Love Somebody Else Package",
 ];
 
+const packageDetails = [
+  `
+    - Area taman dengan rumput sintetis
+    - Balai Taman
+    - Ruang rias gratis
+    - Penggunaan seharian penuh (7 pagi sampai 10 malam)
+    - 1 Junior Suite untuk 1 malam di Grand Mercure Hotel
+    - Penggunaan listrik 10.000 watt
+    - Sesi pra-pernikahan gratis
+    - Layanan kebersihan pada hari acara, keamanan, lingkungan, dan izin polisi
+  `,
+  `
+    - For Akad/Holy Matrimony dan Wedding Reception
+    - 15-20 crews
+    - Work stars upon completion of contract signing and down payment
+    - Unlimited consultation via phone call or chat up to 15 face to face meetings.
+    - Carrying out timelines, budgeting plan, and wedding checklist
+    - Strategically assembling the most suitable vendors based on the questionnaire
+    - Scheduling vendors meeting and become the contact person for all vendors
+    - Arranging a family meeting for both sides of the family
+    - Arranging a Technical Meeting with all the booked vendors to oversee each and every detail of the wedding
+    - Monitoring all the booked vendors during preparation and execution.
+    - Providing Wedding Report
+    - Ensuring that everything runs smoothly by paying attention
+
+    * Maximum 10 working hours
+    * Additional charge may apply
+  `,
+];
+
 module.exports = {
   venueServices,
   organizerServices,
@@ -198,4 +239,6 @@ module.exports = {
   packageAlbums,
   weddingOrganizer,
   weddingVenue,
+  weddingPackages,
+  packageDetails,
 };

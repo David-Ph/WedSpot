@@ -1,4 +1,4 @@
-const { vendor } = require("../models");
+const { vendor, Notification } = require("../models");
 
 const jwt = require("jsonwebtoken");
 
@@ -17,7 +17,12 @@ class Vendor {
         .findOne({ _id: req.vendor._id })
         .select("-password");
 
-      res.status(200).json({ token, currentVendor });
+      const newNotifications = await Notification.count({
+        notification_forVendor: req.vendor._id,
+        notification_isNew: true,
+      });
+
+      res.status(200).json({ token, currentVendor, newNotifications });
     } catch (error) {
       next(error);
     }
