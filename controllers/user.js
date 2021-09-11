@@ -18,6 +18,48 @@ class UserController {
       next(error);
     }
   }
+
+  async received_user_token(req, res, next) {
+    try {
+      const new_data = await User.findOneAndUpdate(
+        { _id: req.user.user },
+        { user_messaging_token: req.body.messaging_token },
+        { new: true }
+      );
+
+      if (!new_data) {
+        return next({
+          statusCode: 404,
+          message: "User messaging token is not found",
+        });
+      }
+
+      res.status(201).json("received token success");
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleted_user_token(req, res, next) {
+    try {
+      const new_data = await User.findOneAndUpdate(
+        { _id: req.user.user },
+        { user_messaging_token: null },
+        { new: true }
+      );
+
+      if (!new_data) {
+        return next({
+          statusCode: 404,
+          message: "User messaging token is not found",
+        });
+      }
+
+      res.status(201).json("deleted token success");
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new UserController();

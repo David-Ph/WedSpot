@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema(
       default:
         "https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg",
     },
+    user_messaging_token: {
+      type: String,
+      default: null,
+    },
   },
   {
     // Enables timestamps

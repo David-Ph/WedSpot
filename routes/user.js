@@ -23,7 +23,11 @@ const {
   login_validator,
 } = require("../middlewares/validators/user_auth.js");
 
-const { update_user } = require("../controllers/user");
+const {
+  update_user,
+  deleted_user_token,
+  received_user_token,
+} = require("../controllers/user");
 
 const {
   get_token,
@@ -46,7 +50,8 @@ router.put(
   user_validator,
   update_user
 );
-
+router.put("/storetoken", user, received_user_token);
+router.put("/deletetoken", user, deleted_user_token);
 // * For google oAuth Front End
 router.get("/auth/google", googleSignIn);
 router.get("/auth/google/redirect", googleRedirect, get_token_oauth);
