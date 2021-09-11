@@ -51,7 +51,8 @@ router.put(
   update_user
 );
 router.put("/storetoken", user, received_user_token);
-router.put("/deletetoken", user, deleted_user_token);
+router.put("/logout", user, deleted_user_token);
+
 // * For google oAuth Front End
 router.get("/auth/google", googleSignIn);
 router.get("/auth/google/redirect", googleRedirect, get_token_oauth);

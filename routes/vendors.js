@@ -70,7 +70,7 @@ router.put(
 router.get("/:id", getVendorById);
 
 router.put("/logout", vendor, removeToken); // to delete messaging token
-router.put("/storeToken", vendor, storeToken); // to edit messaging token that recieved
+router.put("/storetoken", vendor, storeToken); // to edit messaging token that recieved
 
 // * For Front End google oAuth
 router.get("/auth/google", googleSignIn);

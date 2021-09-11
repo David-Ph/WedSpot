@@ -34,7 +34,7 @@ class UserController {
         });
       }
 
-      res.status(201).json("received token success");
+      res.status(201).json({ message: "Token successfully stored" });
     } catch (error) {
       next(error);
     }
@@ -55,7 +55,7 @@ class UserController {
         });
       }
 
-      res.status(201).json("deleted token success");
+      res.status(201).json({ message: "Remove token successfully" });
     } catch (error) {
       next(error);
     }

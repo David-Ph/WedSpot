@@ -116,7 +116,7 @@ class Vendors {
     try {
       const data = await vendor.findOneAndUpdate(
         { _id: req.vendor.user },
-        { vendor_messaging_token: "" }
+        { vendor_messaging_token: null }
       );
 
       res.status(201).json({ message: "Remove token successfully" });
