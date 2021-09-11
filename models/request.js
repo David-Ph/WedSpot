@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const mongooseDelete = require("mongoose-delete");
+const axios = require("axios");
+const url = "https://jsonplaceholder.typicode.com/posts";
 
 const requestSchema = new mongoose.Schema(
   {
