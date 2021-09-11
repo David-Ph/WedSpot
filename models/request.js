@@ -95,10 +95,12 @@ requestSchema.statics.sendNotification = async function (request) {
     const pushToUser = await axios.post(
       url,
       {
-        to: "eMsJhkpIbjs4gyQN5_Eitv:APA91bG2cTShzfT7lNOkzq6nsyaQEqN91rjnZGzjlbaQP02hlRFC8rmvYYsM61520gnsB3iK80D-ajvvADUXEXO3JB9dIn7nLORl8n2UjG7_-NIsrkbluukXLO81ysFs0lEP6auGvMHL",
+        to: findUser.user_messaging_token,
         notification: {
           title: "Your request has already been sent",
           body: `Yay! Your request for quotation has been sent to ${findVendor.vendor_name}`,
+        },
+        data: {
           request_id: request._id,
           vendor_id: request.request_vendor_id,
           user_id: request.request_user_id,
@@ -128,10 +130,12 @@ requestSchema.statics.sendNotification = async function (request) {
     const pushToVendor = await axios.post(
       url,
       {
-        to: "eMsJhkpIbjs4gyQN5_Eitv:APA91bG2cTShzfT7lNOkzq6nsyaQEqN91rjnZGzjlbaQP02hlRFC8rmvYYsM61520gnsB3iK80D-ajvvADUXEXO3JB9dIn7nLORl8n2UjG7_-NIsrkbluukXLO81ysFs0lEP6auGvMHL",
+        to: findVendor.vendor_messaging_token,
         notification: {
           title: "Request for quotation!",
           body: `You have 1 request for quotation`,
+        },
+        data: {
           request_id: request._id,
           vendor_id: request.request_vendor_id,
           user_id: request.request_user_id,

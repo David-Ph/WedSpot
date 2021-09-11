@@ -102,10 +102,12 @@ quotationSchema.statics.sendNotification = async function (quotation) {
     const pushToUser = await axios.post(
       url,
       {
-        to: "eMsJhkpIbjs4gyQN5_Eitv:APA91bG2cTShzfT7lNOkzq6nsyaQEqN91rjnZGzjlbaQP02hlRFC8rmvYYsM61520gnsB3iK80D-ajvvADUXEXO3JB9dIn7nLORl8n2UjG7_-NIsrkbluukXLO81ysFs0lEP6auGvMHL",
+        to: findUser.user_messaging_token,
         notification: {
           title: "Your requested quotation is here!",
           body: `${findVendor.vendor_name} has sent you a quotation`,
+        },
+        data: {
           request_id: findRequest._id,
           vendor_id: findRequest.request_vendor_id,
           user_id: findRequest.request_user_id,
