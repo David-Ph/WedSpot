@@ -67,7 +67,12 @@ class Vendor {
         // .populate("reviews")
         .select("-password");
 
-      res.status(200).json({ data });
+      const newNotifications = await Notification.count({
+        notification_forVendor: req.vendor._id,
+        notification_isNew: true,
+      });
+
+      res.status(200).json({ data, newNotifications });
     } catch (error) {
       next(error);
     }

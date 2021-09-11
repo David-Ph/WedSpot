@@ -23,7 +23,12 @@ class NotificationController {
         return next({ statusCode: 404, message: "Notification not found" });
       }
 
-      res.status(200).json({ data, count: data.length });
+      const newNotifications = await Notification.count({
+        notification_forVendor: req.vendor._id,
+        notification_isNew: true,
+      });
+
+      res.status(200).json({ data, count: data.length, newNotifications });
     } catch (error) {
       next(error);
     }
@@ -51,7 +56,12 @@ class NotificationController {
         return next({ statusCode: 404, message: "Notification not found" });
       }
 
-      res.status(200).json({ data, count: data.length });
+      const newNotifications = await Notification.count({
+        notification_forUser: req.user._id,
+        notification_isNew: true,
+      });
+
+      res.status(200).json({ data, count: data.length, newNotifications });
     } catch (error) {
       next(error);
     }
