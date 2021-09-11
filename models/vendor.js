@@ -72,6 +72,10 @@ const vendorSchema = new mongoose.Schema(
       min: 1,
       max: 5,
     },
+    vendor_messaging_token: {
+      type: String,
+      default: null,
+    },
   },
 
   {

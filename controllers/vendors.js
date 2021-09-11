@@ -111,6 +111,33 @@ class Vendors {
       next(error);
     }
   }
+
+  async removeToken(req, res, next) {
+    try {
+      const data = await vendor.findOneAndUpdate(
+        { _id: req.vendor.user },
+        { vendor_messaging_token: "" }
+      );
+
+      res.status(201).json({ message: "Remove token successfully" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async storeToken(req, res, next) {
+    try {
+      const data = await vendor.findOneAndUpdate(
+        { _id: req.vendor.user },
+        { vendor_messaging_token: req.body.messaging_token },
+        { new: true }
+      );
+
+      res.status(201).json({ message: "Token successfully stored" });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 //   async deleteVendor(req, res, next) {

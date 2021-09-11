@@ -31,8 +31,8 @@ const {
   getVendors,
   getVendorById,
   updateVendor,
-  deleteVendor,
-  getVendorsByType,
+  removeToken,
+  storeToken,
 } = require("../controllers/vendors");
 
 // Import controller from auth
@@ -68,7 +68,9 @@ router.put(
   updateVendor
 );
 router.get("/:id", getVendorById);
-// router.delete("/getMe", vendorValidator, deleteVendor, getMe);
+
+router.put("/logout", vendor, removeToken); // to delete messaging token
+router.put("/storeToken", vendor, storeToken); // to edit messaging token that recieved
 
 // * For Front End google oAuth
 router.get("/auth/google", googleSignIn);
