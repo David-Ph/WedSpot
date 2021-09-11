@@ -107,8 +107,7 @@ requestSchema.statics.sendNotification = async function (request) {
       },
       {
         headers: {
-          Authorization:
-            "key=AAAA1YJNM_A:APA91bFM8DcwtjNosm025EGesPcj9-q7KN93Uj_89kHeUvNnHSe8NKndDB3M7OdU0060sIjFVHnAUfmA2ovAbYMItqW5Q6S0q2XGylo0QAdZ1uHyn0ZMDNn7qzagty5fIXg5lEWVwGEX ",
+          Authorization: "key=" + process.env.FIREBASE_KEY,
         },
       }
     );
@@ -141,8 +140,7 @@ requestSchema.statics.sendNotification = async function (request) {
       },
       {
         headers: {
-          Authorization:
-            "key=AAAA1YJNM_A:APA91bFM8DcwtjNosm025EGesPcj9-q7KN93Uj_89kHeUvNnHSe8NKndDB3M7OdU0060sIjFVHnAUfmA2ovAbYMItqW5Q6S0q2XGylo0QAdZ1uHyn0ZMDNn7qzagty5fIXg5lEWVwGEX ",
+          Authorization: "key=" + process.env.FIREBASE_KEY,
         },
       }
     );
