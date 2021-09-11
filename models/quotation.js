@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const mongooseDelete = require("mongoose-delete");
+const axios = require("axios");
+const url = "https://fcm.googleapis.com/fcm/send";
 
 const quotationSchema = new mongoose.Schema(
   {
@@ -94,8 +96,29 @@ quotationSchema.statics.sendNotification = async function (quotation) {
         request_user_id: findRequest.request_user_id,
         request_package_id: findRequest.request_package_id._id,
       },
-      notification_type: "request",
+      notification_type: "quotation",
     });
+
+    const pushToUser = await axios.post(
+      url,
+      {
+        to: "eMsJhkpIbjs4gyQN5_Eitv:APA91bG2cTShzfT7lNOkzq6nsyaQEqN91rjnZGzjlbaQP02hlRFC8rmvYYsM61520gnsB3iK80D-ajvvADUXEXO3JB9dIn7nLORl8n2UjG7_-NIsrkbluukXLO81ysFs0lEP6auGvMHL",
+        notification: {
+          title: "Your requested quotation is here!",
+          body: `${findVendor.vendor_name} has sent you a quotation`,
+          request_id: findRequest._id,
+          vendor_id: findRequest.request_vendor_id,
+          user_id: findRequest.request_user_id,
+          package_id: findRequest.request_package_id._id,
+        },
+      },
+      {
+        headers: {
+          Authorization:
+            "key=AAAA1YJNM_A:APA91bFM8DcwtjNosm025EGesPcj9-q7KN93Uj_89kHeUvNnHSe8NKndDB3M7OdU0060sIjFVHnAUfmA2ovAbYMItqW5Q6S0q2XGylo0QAdZ1uHyn0ZMDNn7qzagty5fIXg5lEWVwGEX ",
+        },
+      }
+    );
 
     // const vendorNotification = await this.model("Notification").create({
     //   notification_title: "Request for quotation!",

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const mongooseDelete = require("mongoose-delete");
 const axios = require("axios");
-const url = "https://jsonplaceholder.typicode.com/posts";
+const url = "https://fcm.googleapis.com/fcm/send";
 
 const requestSchema = new mongoose.Schema(
   {
@@ -92,6 +92,27 @@ requestSchema.statics.sendNotification = async function (request) {
       notification_type: "request",
     });
 
+    const pushToUser = await axios.post(
+      url,
+      {
+        to: "eMsJhkpIbjs4gyQN5_Eitv:APA91bG2cTShzfT7lNOkzq6nsyaQEqN91rjnZGzjlbaQP02hlRFC8rmvYYsM61520gnsB3iK80D-ajvvADUXEXO3JB9dIn7nLORl8n2UjG7_-NIsrkbluukXLO81ysFs0lEP6auGvMHL",
+        notification: {
+          title: "Your request has already been sent",
+          body: `Yay! Your request for quotation has been sent to ${findVendor.vendor_name}`,
+          request_id: request._id,
+          vendor_id: request.request_vendor_id,
+          user_id: request.request_user_id,
+          package_id: request.request_package_id._id,
+        },
+      },
+      {
+        headers: {
+          Authorization:
+            "key=AAAA1YJNM_A:APA91bFM8DcwtjNosm025EGesPcj9-q7KN93Uj_89kHeUvNnHSe8NKndDB3M7OdU0060sIjFVHnAUfmA2ovAbYMItqW5Q6S0q2XGylo0QAdZ1uHyn0ZMDNn7qzagty5fIXg5lEWVwGEX ",
+        },
+      }
+    );
+
     const vendorNotification = await this.model("Notification").create({
       notification_title: "Request for quotation!",
       notification_body: `You have 1 request for quotation`,
@@ -104,6 +125,27 @@ requestSchema.statics.sendNotification = async function (request) {
       },
       notification_type: "request",
     });
+
+    const pushToVendor = await axios.post(
+      url,
+      {
+        to: "eMsJhkpIbjs4gyQN5_Eitv:APA91bG2cTShzfT7lNOkzq6nsyaQEqN91rjnZGzjlbaQP02hlRFC8rmvYYsM61520gnsB3iK80D-ajvvADUXEXO3JB9dIn7nLORl8n2UjG7_-NIsrkbluukXLO81ysFs0lEP6auGvMHL",
+        notification: {
+          title: "Request for quotation!",
+          body: `You have 1 request for quotation`,
+          request_id: request._id,
+          vendor_id: request.request_vendor_id,
+          user_id: request.request_user_id,
+          package_id: request.request_package_id._id,
+        },
+      },
+      {
+        headers: {
+          Authorization:
+            "key=AAAA1YJNM_A:APA91bFM8DcwtjNosm025EGesPcj9-q7KN93Uj_89kHeUvNnHSe8NKndDB3M7OdU0060sIjFVHnAUfmA2ovAbYMItqW5Q6S0q2XGylo0QAdZ1uHyn0ZMDNn7qzagty5fIXg5lEWVwGEX ",
+        },
+      }
+    );
   } catch (error) {
     console.error(error);
   }
