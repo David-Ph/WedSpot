@@ -10,11 +10,11 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 exports.register = (req, res, next) => {
   passport.authenticate("register", { session: false }, (err, vendor, info) => {
     if (err) {
-      return next({ message: err.message, statusCode: 401 });
+      return next({ message: "failed to register", statusCode: 401 });
     }
 
     if (!vendor) {
-      return next({ message: info.message, statusCode: 401 });
+      return next({ message: "failed to register", statusCode: 401 });
     }
 
     req.vendor = vendor;
@@ -47,11 +47,11 @@ passport.use(
 exports.login = (req, res, next) => {
   passport.authenticate("login", { session: false }, (err, vendor, info) => {
     if (err) {
-      return next({ message: err.message, statusCode: 401 });
+      return next({ message: "failed to login", statusCode: 401 });
     }
 
     if (!vendor) {
-      return next({ message: info.message, statusCode: 401 });
+      return next({ message: "failed to login", statusCode: 401 });
     }
 
     req.vendor = vendor;
@@ -137,11 +137,11 @@ passport.use(
 exports.vendor = (req, res, next) => {
   passport.authorize("vendor", { session: false }, (err, vendor, info) => {
     if (err) {
-      return next({ message: err.message, statusCode: 403 });
+      return next({ message: "vendor not logged in", statusCode: 403 });
     }
 
     if (!vendor) {
-      return next({ message: info.message, statusCode: 403 });
+      return next({ message: "vendor not logged in", statusCode: 403 });
     }
 
     req.vendor = vendor;
