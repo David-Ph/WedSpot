@@ -24,7 +24,7 @@ class NotificationController {
       }
 
       const newNotifications = await Notification.count({
-        notification_forVendor: req.vendor._id,
+        notification_forVendor: req.vendor.user,
         notification_isNew: true,
       });
 
@@ -57,7 +57,7 @@ class NotificationController {
       }
 
       const newNotifications = await Notification.count({
-        notification_forUser: req.user._id,
+        notification_forUser: req.user.user,
         notification_isNew: true,
       });
 
