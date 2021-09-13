@@ -105,7 +105,9 @@ exports.packageValidator = async (req, res, next) => {
     }
 
     if (req.files?.length > 0) {
-      req.body.package_album = [];
+      if (!req.body.package_album) {
+        req.body.package_album = [];
+      }
       req.files.forEach((photo) => {
         if (!photo.mimetype.startsWith("image") || photo.size > 2000000) {
           errorMessages.push("File must be an image and less than 2MB");
