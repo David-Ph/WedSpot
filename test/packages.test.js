@@ -318,6 +318,7 @@ describe("PUT /packages", () => {
       .put(`/packages/${findPackage[0]._id}`)
       .set("Authorization", `Bearer ${vendorToken}`) // set the token in the test
       .send({
+        package_price: "25000000",
         package_status: "invalid input",
       });
 
