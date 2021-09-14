@@ -92,6 +92,19 @@ requestSchema.statics.sendNotification = async function (request) {
       notification_type: "request",
     });
 
+    const vendorNotification = await this.model("Notification").create({
+      notification_title: "Request for quotation!",
+      notification_body: `You have 1 request for quotation`,
+      notification_forVendor: findVendor._id,
+      notification_payload: {
+        request_id: request._id,
+        request_vendor_id: request.request_vendor_id,
+        request_user_id: request.request_user_id,
+        request_package_id: request.request_package_id._id,
+      },
+      notification_type: "request",
+    });
+
     const pushToUser = await axios.post(
       url,
       {
@@ -113,19 +126,6 @@ requestSchema.statics.sendNotification = async function (request) {
         },
       }
     );
-
-    const vendorNotification = await this.model("Notification").create({
-      notification_title: "Request for quotation!",
-      notification_body: `You have 1 request for quotation`,
-      notification_forVendor: findVendor._id,
-      notification_payload: {
-        request_id: request._id,
-        request_vendor_id: request.request_vendor_id,
-        request_user_id: request.request_user_id,
-        request_package_id: request.request_package_id._id,
-      },
-      notification_type: "request",
-    });
 
     const pushToVendor = await axios.post(
       url,
