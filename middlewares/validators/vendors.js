@@ -2,7 +2,7 @@
 const { vendor, Package } = require("../../models");
 const validator = require("validator");
 const mongoose = require("mongoose");
-const { locations } = require("../../config/types");
+const { locations } = require("../../config/services");
 
 exports.queryVendorValidator = async (req, res, next) => {
   try {

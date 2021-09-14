@@ -49,7 +49,7 @@ exports.packageValidator = async (req, res, next) => {
       errorMessages.push("Invalid location");
     }
 
-    if (req.body.package_price && !validator.isInt(req.body.package_price)) {
+    if (!validator.isInt(req.body.package_price)) {
       errorMessages.push("Invalid package_price format! Please insert numeric");
     }
 
