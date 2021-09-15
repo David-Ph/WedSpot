@@ -33,7 +33,9 @@ exports.register_validator = async (req, res, next) => {
     }
 
     if (!validator.isStrongPassword(req.body.user_password)) {
-      error_messages.push("password is not strong enough");
+      errorMessages.push(
+        "password is not strong. Needs to have lowercase, uppercase, a number, and a symbol"
+      );
     }
 
     if (error_messages.length > 0) {

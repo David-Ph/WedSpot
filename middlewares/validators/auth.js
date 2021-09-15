@@ -16,7 +16,9 @@ exports.registerValidator = async (req, res, next) => {
       req.body.vendor_password &&
       !validator.isStrongPassword(req.body.vendor_password)
     ) {
-      errorMessages.push("password is not strong");
+      errorMessages.push(
+        "password is not strong. Needs to have lowercase, uppercase, a number, and a symbol"
+      );
     }
 
     if (errorMessages.length) {
